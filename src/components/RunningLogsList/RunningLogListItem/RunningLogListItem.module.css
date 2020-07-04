@@ -1,0 +1,28 @@
+.RunningLogListItem {
+    background-color: white;
+}
+
+.RunningLogListItem:hover {
+    background-color: lightcyan;
+}
+
+.RunningLogListItemClicked {
+    background-color: lightcyan;
+}
+
+.RunningLogListItemJobName {
+    width: 40%;
+    max-width: 40%;
+}
+
+.RunningLogListItemNumActions {
+    width: 10%;
+}
+
+.RunningLogListItemNumLayers {
+    width: 10%;
+}
+
+.RunningLogListItemRunningTime {
+    width: 20%;
+}

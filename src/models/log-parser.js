@@ -3,6 +3,7 @@ export function parse(text) {
     const arrayOfTimestamps = timestamps(row_lines);
     return {
         runningDate: runningDate(row_lines),
+        runningTime: runningTime(row_lines),
         jobName: jobName(row_lines),
         batch: batch(arrayOfTimestamps),
         uploadTime: uploadTime(arrayOfTimestamps),
@@ -25,6 +26,21 @@ function runningDate(row_lines) {
     let [day, month, year] = splitArray[1].split(':')[1].split('/');
     let [hour, min] = splitArray[2].split(':');
     return new Date(Date.UTC(year, month - 1, day, hour, min)).toUTCString();
+}
+
+function runningTime(row_lines) {
+    let job_started_line = row_lines
+        .filter(line => line.match("Ready for commands"))[0];
+    let start_time = JSON.parse(job_started_line).time;
+    let job_ended_line = row_lines
+        .filter(line => line.match("Job is ready"));
+    if (job_ended_line.length === 0)
+        return null;
+
+    let end_time = JSON.parse(job_ended_line).time;
+
+    return secToHHMMSS(
+        time_diff(start_time, end_time))
 }
 
 export function getChartData(data) {
@@ -116,25 +132,25 @@ function mergerTime(arrayOfTimestamps) {
     let merger = arrayOfTimestamps.filter(d => d.object === "Merger")
     let s = {
         StartTime: toLocal(
-            merger.find(s => s.message === "Preparing job for merge").time
+            merger?.find(s => s.message === "Preparing job for merge")?.time
         ),
         CompleteTime: toLocal(
-            merger.find(s => s.message === "Moving Job to S3").time
+            merger?.find(s => s.message === "Moving Job to S3")?.time
         )
     };
-    return s;
+    return s || 0;
 }
 
 function downloadTime(arrayOfTimestamps) {
     let downloadTime = {
         StartTime: arrayOfTimestamps.find(
             d => d.object === "WebClient" && d.message === "Download Data"
-        ).time,
+        )?.time,
         CompleteTime: arrayOfTimestamps.find(
             d => d.object === "WebClient" && d.message === "Job is ready"
-        ).time
+        )?.time
     };
-    return downloadTime;
+    return downloadTime || 0;
 }
 
 function acpTime(arrayOfTimestamps) {
@@ -174,7 +190,7 @@ function acpTime(arrayOfTimestamps) {
             StartTime: action.StartTime,
             CompleteTime: acp_completed.find(
                 c => c.Stage === action.Stage && c.Index === action.Index
-            ).CompleteTime
+            )?.CompleteTime
         };
     })
     return acp_timestamp;
@@ -201,6 +217,7 @@ function secToHHMMSS(time) {
 }
 
 function toLocal(hhmmss) {
+    if (!hhmmss) return null;
     let [HH, MM, SS] = hhmmss.split(':');
     let local = [Number(HH) + 3, MM, SS].join(':');
     return local;

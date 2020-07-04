@@ -1,9 +1,10 @@
 import React from 'react';
 import { VegaLite } from 'react-vega'
+import styles from './VegaLiteChart.module.css';
 
 function VegaLiteChart(props) {
     const spec = {
-        title: "DFM on cloud running chart",
+        title: props.runData?.jobName,
         data: { values: props.data },
         mark: { type: "bar", tooltip: [] },
         encoding: {
@@ -29,9 +30,10 @@ function VegaLiteChart(props) {
     }
 
     return (
-        <div>
+        <div className={styles.VegaLiteChart}>
             {
-                props.data ? <VegaLite spec={spec} data={props.data} /> : null
+                props.data && props.runData.runningTime ?
+                    <VegaLite spec={spec} data={props.data}/> : "No data"
             }
         </div>
     );
