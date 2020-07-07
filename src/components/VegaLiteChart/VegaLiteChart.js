@@ -24,7 +24,7 @@ function VegaLiteChart(props) {
             },
             color: { field: "Object" }
         },
-        width: 600,
+        width: 800,
         // height: 800,
         autosize: "fit"
     }

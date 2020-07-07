@@ -2,46 +2,68 @@ import React, {useEffect, useState} from 'react';
 import styles from './MainComponent.module.css';
 import RunningLogsList from "../RunningLogsList/RunningLogsList";
 import VegaLiteChart from "../VegaLiteChart/VegaLiteChart";
-import {getChartData, parse} from "../../models/log-parser";
-import * as d3 from "d3";
+import {getChartData, getListData} from "../../models/log-parser";
 
-const urls_list = [
-    "https://acp-cloud-logs.s3.eu-central-1.amazonaws.com/-acpcloud186ba.16420_cloud_aw180727--slr_benchmark",
-    "https://acp-cloud-logs.s3.eu-central-1.amazonaws.com/-acpcloud186bc.16420_ne190635_986878x1_cloud_benchmark_dup",
-    "https://acp-cloud-logs.s3.eu-central-1.amazonaws.com/-acpcloud186c2.16420_tan_wc78800_mrc200net2p_cloud%2B1",
-    "https://acp-cloud-logs.s3.eu-central-1.amazonaws.com/-acpcloud186d0.16420_cloud_a269321e.test2%2B2"
-]
+import axios from "axios";
 
-async function loadFile(index) {
-    let url = urls_list[index]
-    let text = await d3.text(url)
-    let data = parse(text);
-    return data;
-}
 
 function MainComponent(props) {
+    const [logDataArray, setLogDataArray] = useState([]);
+    const [logsListData, setLogsListData] = useState([]);
+
     const [chartData, setChartData] = useState(null);
     const [runData, setRunData] = useState(null);
     const [index, setIndex] = useState(0);
 
-    useEffect(() => {
+    async function loadFiles() {
+        let logs_api_uri = "https://bah2tkltg6.execute-api.eu-central-1.amazonaws.com/test/list";
+
+        let resp = await axios.get(logs_api_uri);
+        let keys_list = JSON.parse(resp.data.body).keys;
+
+        let promises = keys_list.map (key => axios.get(`${logs_api_uri}/${key}`))
+        let respArray = await Promise.all(promises)
+        let dataArray = respArray.map(resp => resp.data);
+
+        return dataArray;
+    }
+
+    // Effect to load all data from AWS s3
+    useEffect( () => {
         const fetchData = async () => {
-            const localData = await loadFile(index);
-            const localChartData = localData.runningTime ? getChartData(localData) : null;
-            const actionsNum = localData.batch[localData.batch.length-1].ActNum;
-            const layersNum = new Set(localData.batch.map(action => action.LayerName)).size;
-            setRunData({
-                jobName: localData?.jobName,
-                actionsNum: actionsNum,
-                layersNum: layersNum,
-                runningTime: localData.runningTime
-            });
-            setChartData(localChartData);
+            const localDataArray = await loadFiles();
+            if (localDataArray.length > 0) {
+                setLogDataArray(localDataArray);           // all the data
+            }
         };
 
-        fetchData();
-    }, [index]);
+        if (logDataArray.length === 0) {
+            fetchData();
+        }
+    });
 
+    // Effect to update list to be displayed
+    useEffect( () => {
+        if (logDataArray.length > 0) {
+            const localLogsListData = logDataArray.map(data => getListData(data))
+            setLogsListData(localLogsListData)
+        }
+    }, [logDataArray])
+
+    // Effect to update chart on click on a row in the list
+    useEffect(() => {
+        if (logDataArray.length > 0) {
+            const localData = logDataArray[index];
+            const localChartData = localData.runningTime ? getChartData(localData) : null;
+            const localRunData = getListData(localData);
+
+            setChartData(localChartData);              // chart data for selected log in the list
+            setRunData(localRunData);                  // run data for selected row in the list, help to build chart
+        }
+    }, [logDataArray, index]);
+
+
+    // Effect to update current index
     const logItemClicked = (index) => {
         setIndex(index);
     }
@@ -49,7 +71,7 @@ function MainComponent(props) {
     return (
         <main className={styles.MainComponent}>
             <RunningLogsList
-                urls_list={urls_list}
+                logsListData={logsListData}
                 selectedIndex={index}
                 logItemClicked={logItemClicked}/>
             <VegaLiteChart data={chartData} runData={runData} />

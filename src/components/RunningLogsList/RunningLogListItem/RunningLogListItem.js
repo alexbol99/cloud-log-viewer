@@ -1,8 +1,7 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import styles from './RunningLogListItem.module.css';
 
 function RunningLogsListItem(props) {
-    // const [logsListData, setLogsListData] = useState(null);
     let style = props.selected ? styles.RunningLogListItemClicked : styles.RunningLogListItem
     return (
         <tr className={style} onClick={props.itemClicked}>

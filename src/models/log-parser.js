@@ -100,6 +100,17 @@ export function getChartData(data) {
     return stats;
 }
 
+export function getListData(localData) {
+    const actionsNum = localData?.batch[localData.batch.length - 1].ActNum;
+    const layersNum = new Set(localData?.batch.map(action => action.LayerName)).size;
+    return {
+        jobName: localData?.jobName,
+        actionsNum: actionsNum,
+        layersNum: layersNum,
+        runningTime: localData.runningTime
+    }
+}
+
 function batch(arrayOfTimestamps) {
     let batchObject = arrayOfTimestamps.filter(d => d.type === "Batch")[0]
     return JSON.parse(batchObject.message);
@@ -129,28 +140,31 @@ function splitterTime(arrayOfTimestamps) {
 }
 
 function mergerTime(arrayOfTimestamps) {
-    let merger = arrayOfTimestamps.filter(d => d.object === "Merger")
+    let merger = arrayOfTimestamps.filter(d => d.object === "Merger");
+    if (!merger) return null
+
+    let mergerStartedMessage = merger.find(s => s.message === "Preparing job for merge");
+    let mergerCompleteMessage = merger.find(s => s.message === "Moving Job to S3");
+
+    if (!mergerStartedMessage || !mergerCompleteMessage) return null;
+
     let s = {
-        StartTime: toLocal(
-            merger?.find(s => s.message === "Preparing job for merge")?.time
-        ),
-        CompleteTime: toLocal(
-            merger?.find(s => s.message === "Moving Job to S3")?.time
-        )
+        StartTime: toLocal(mergerStartedMessage.time),
+        CompleteTime: toLocal(mergerCompleteMessage.time)
     };
-    return s || 0;
+    return s;
 }
 
 function downloadTime(arrayOfTimestamps) {
+    let downloadStartMessage = arrayOfTimestamps.find(d => d.object === "WebClient" && d.message === "Download Data");
+    let downloadCompleteMessage = arrayOfTimestamps.find(d => d.object === "WebClient" && d.message === "Job is ready");
+    if (!downloadStartMessage || !downloadCompleteMessage) return null;
+
     let downloadTime = {
-        StartTime: arrayOfTimestamps.find(
-            d => d.object === "WebClient" && d.message === "Download Data"
-        )?.time,
-        CompleteTime: arrayOfTimestamps.find(
-            d => d.object === "WebClient" && d.message === "Job is ready"
-        )?.time
+        StartTime: downloadStartMessage.time,
+        CompleteTime: downloadCompleteMessage.time
     };
-    return downloadTime || 0;
+    return downloadTime;
 }
 
 function acpTime(arrayOfTimestamps) {
@@ -164,7 +178,7 @@ function acpTime(arrayOfTimestamps) {
             Stage: message[1].split(':')[1],
             Index: Number(message[2].split(':')[1])
         };
-    })
+    });
     let acp_started = acp_transformed
         .filter(action => action.Step === "Starting")
         .map(action => {
@@ -173,7 +187,7 @@ function acpTime(arrayOfTimestamps) {
                 Index: action.Index,
                 StartTime: action.Time
             };
-        })
+        });
     let acp_completed = acp_transformed
         .filter(action => action.Step === "Completed")
         .map(action => {
@@ -182,22 +196,24 @@ function acpTime(arrayOfTimestamps) {
                 Index: action.Index,
                 CompleteTime: action.Time
             };
-        })
+        });
     let acp_timestamp = acp_started.map(action => {
-        return {
+        let completeTimeMessage = acp_completed.find(
+            c => c.Stage === action.Stage && c.Index === action.Index
+        );
+
+        return completeTimeMessage ? {
             Stage: action.Stage,
             Index: action.Index,
             StartTime: action.StartTime,
-            CompleteTime: acp_completed.find(
-                c => c.Stage === action.Stage && c.Index === action.Index
-            )?.CompleteTime
-        };
-    })
+            CompleteTime: completeTimeMessage.CompleteTime
+        }  : null;
+    });
     return acp_timestamp;
 }
 
 function timestamps(row_lines) {
-    let arrayOfLines = row_lines.filter(line => line.match("time"))
+    let arrayOfLines = row_lines.filter(line => line.match("time"));
     let tmpArrayOfLines = [...arrayOfLines];
     tmpArrayOfLines.splice(0, 1);
     return tmpArrayOfLines.map(line => JSON.parse(line));

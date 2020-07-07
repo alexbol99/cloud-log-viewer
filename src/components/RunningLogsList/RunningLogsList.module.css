@@ -6,6 +6,8 @@
     -webkit-font-smoothing: antialiased;
     font-weight: bolder;
     font-size: smaller;
+    padding-left: 1em;
+    padding-right: 1em;
 }
 
 .RunningLogsList thead {
