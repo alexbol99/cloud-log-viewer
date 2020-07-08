@@ -10,10 +10,25 @@
     background-color: lightcyan;
 }
 
+.RunningLogListItem a {
+    text-decoration: none;
+    /*text-decoration-color: azure;*/
+}
+
+.RunningLogListItem a:link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.RunningLogListItemNumeric {
+    text-align: center;
+}
+
 .RunningLogListItemJobName {
     width: 40%;
     max-width: 40%;
 }
+
 
 .RunningLogListItemNumActions {
     width: 10%;

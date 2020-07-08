@@ -6,6 +6,7 @@ function App() {
     return (
         <div className="App">
             <h1>Cloud Running Logs</h1>
+            <hr/>
             <MainComponent />
         </div>
     );

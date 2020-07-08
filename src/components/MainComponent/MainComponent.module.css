@@ -1,6 +1,6 @@
 .MainComponent {
-    display: flex;
+    /*display: flex;*/
     min-height: 100vh;
-    flex-direction: row;
+    /*flex-direction: column;*/
     overflow: hidden;
 }

@@ -104,10 +104,13 @@ export function getListData(localData) {
     const actionsNum = localData?.batch[localData.batch.length - 1].ActNum;
     const layersNum = new Set(localData?.batch.map(action => action.LayerName)).size;
     return {
+        runningDate: localData?.runningDate,
         jobName: localData?.jobName,
         actionsNum: actionsNum,
         layersNum: layersNum,
-        runningTime: localData.runningTime
+        runningTime: localData?.runningTime,
+        batchJobsNum: localData?.batch.length,
+        key: localData?.key,
     }
 }
 
