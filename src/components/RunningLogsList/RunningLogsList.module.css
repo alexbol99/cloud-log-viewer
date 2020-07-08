@@ -1,5 +1,5 @@
 .RunningLogsList {
-    width: 80%;
+    width: 90%;
     text-align: left;
     margin: auto;
     max-height: 300px;
@@ -22,6 +22,7 @@
 .RunningLogsListTable {
     /*flex: 1;*/
     /*text-align: left;*/
+    position: relative;
     overflow-y: auto;
     font-weight: bolder;
     font-size: smaller;
@@ -29,6 +30,9 @@
 
 .RunningLogsList thead {
     /*padding-inline-start: 40px;*/
+}
+.RunningLogsList th {
+    position: sticky;
 }
 
 .RunningLogsList tr,td, th {

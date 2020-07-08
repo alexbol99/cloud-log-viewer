@@ -12,6 +12,12 @@ function RunningLogsListItem(props) {
             <td>
                 {props.data.jobName}
             </td>
+            <td>
+                {props.data.step}
+            </td>
+            <td>
+                {props.data.checklist}
+            </td>
             <td className={styles.RunningLogListItemNumeric}>
                 {props.data.actionsNum}
             </td>

@@ -26,6 +26,9 @@ function MainComponent(props) {
         let json_promises = respArray.map(resp => resp.json())
         let dataArray = await Promise.all(json_promises);
         dataArray.forEach( (data,i) => data.key = keys_list[i] )
+        dataArray.sort(function(a,b){
+            return new Date(b.runningDate) - new Date(a.runningDate);
+        });
         return dataArray;
     }
 

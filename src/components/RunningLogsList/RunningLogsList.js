@@ -1,8 +1,32 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import styles from './RunningLogsList.module.css';
 import RunningLogsListItem from "./RunningLogListItem/RunningLogListItem";
 
 function RunningLogsList(props) {
+    useEffect( () => {
+        const handleKeyDown = (e) => {
+            switch (e.code) {
+                case "ArrowDown":
+                    e.stopPropagation();
+                    e.preventDefault();
+                    props.logItemClicked(Math.min(props.selectedIndex+1, props.logsListData.length));
+                    break;
+                case "ArrowUp":
+                    e.stopPropagation();
+                    e.preventDefault();
+                    props.logItemClicked(Math.max(props.selectedIndex-1,0));
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        document.addEventListener('keydown', handleKeyDown);
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    })
+
     return (
         <div className={styles.RunningLogsList}>
             <header>
@@ -18,6 +42,8 @@ function RunningLogsList(props) {
                 <tr>
                     <th>Running date</th>
                     <th>Job Name</th>
+                    <th>Step</th>
+                    <th>Checklist</th>
                     <th># Actions</th>
                     <th># Layers</th>
                     <th># ACPs</th>

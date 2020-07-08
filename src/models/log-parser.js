@@ -106,6 +106,8 @@ export function getListData(localData) {
     return {
         runningDate: localData?.runningDate,
         jobName: localData?.jobName,
+        step: localData?.batch[0].StepName,
+        checklist: localData?.batch[0].ChecklistName,
         actionsNum: actionsNum,
         layersNum: layersNum,
         runningTime: localData?.runningTime,
