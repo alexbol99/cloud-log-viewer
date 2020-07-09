@@ -54,7 +54,7 @@ export function getChartData(data) {
             Name: action.AnalysisName,
             Layer: action.LayerName,
             Stage: action.Stage,
-            Index: action.StageIndex,
+            Index: action.Stage + '_' + action.StageIndex,
             StartTime: timestamp ? timestamp.StartTime : "",
             CompleteTime: timestamp ? timestamp.CompleteTime : "",
             Time: time_diff(timestamp.StartTime, timestamp.CompleteTime),

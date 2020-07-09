@@ -9,7 +9,7 @@ function RunningLogsList(props) {
                 case "ArrowDown":
                     e.stopPropagation();
                     e.preventDefault();
-                    props.logItemClicked(Math.min(props.selectedIndex+1, props.logsListData.length));
+                    props.logItemClicked(Math.min(props.selectedIndex+1, props.logsListData.length-1));
                     break;
                 case "ArrowUp":
                     e.stopPropagation();
