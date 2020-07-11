@@ -32,7 +32,8 @@ function RunningLogsList(props) {
             <header>
                 <span>Amazon s3 ></span>
                 <span>
-                    <a href="https://s3.console.aws.amazon.com/s3/buckets/acp-cloud-logs/?region=eu-central-1&tab=overview#">
+                    <a href="https://s3.console.aws.amazon.com/s3/buckets/acp-cloud-logs/?region=eu-central-1&tab=overview#"
+                       target="_blank" rel="noopener noreferrer">
                         acp-cloud-logs
                     </a>
                 </span>

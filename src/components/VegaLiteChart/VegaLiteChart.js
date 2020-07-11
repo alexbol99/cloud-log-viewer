@@ -20,7 +20,8 @@ function VegaLiteChart(props) {
             },
             y: {
                 type: "nominal",
-                field: "Index"
+                field: "Index",
+                sort: null
             },
             color: { field: "Object" }
         },

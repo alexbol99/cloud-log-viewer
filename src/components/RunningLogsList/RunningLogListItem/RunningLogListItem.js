@@ -1,11 +1,32 @@
-import React from 'react';
+import React, {useRef, useEffect} from 'react';
 import styles from './RunningLogListItem.module.css';
 
 function RunningLogsListItem(props) {
+    const refElement = useRef();
+    useEffect( () => {
+        if (props.selected) {
+            scrollIntoView();
+        }
+    })
+
     let style = props.selected ? styles.RunningLogListItemClicked : styles.RunningLogListItem
     let object_url = "https://s3.console.aws.amazon.com/s3/object/acp-cloud-logs/"+props.data.key;
+
+    const scrollIntoView = () => {
+        const tableBody = refElement.current.parentElement;
+        const table = tableBody.parentElement;
+        const tableClientRect = table.getBoundingClientRect();
+        const rowClientReact = refElement.current.getBoundingClientRect();
+        if (rowClientReact.bottom > tableClientRect.bottom) {
+            refElement.current.scrollIntoView(false);
+        }
+        if (rowClientReact.top < tableClientRect.top) {
+            refElement.current.scrollIntoView(true);
+        }
+    }
+
     return (
-        <tr className={style} onClick={props.itemClicked}>
+        <tr className={style} onClick={props.itemClicked} ref={refElement}>
             <td>
                 {props.data.runningDate}
             </td>
@@ -31,7 +52,7 @@ function RunningLogsListItem(props) {
                 {props.data.runningTime || "Failed"}
             </td>
             <td>
-                <a href={object_url}>
+                <a href={object_url} target="_blank" rel="noopener noreferrer">
                     {props.data.key}
                 </a>
             </td>
