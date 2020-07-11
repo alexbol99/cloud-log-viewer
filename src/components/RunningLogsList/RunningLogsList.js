@@ -9,12 +9,16 @@ function RunningLogsList(props) {
                 case "ArrowDown":
                     e.stopPropagation();
                     e.preventDefault();
-                    props.logItemClicked(Math.min(props.selectedIndex+1, props.logsListData.length-1));
+                    if (props.selectedIndex < props.logsListData.length-1) {
+                        props.logItemClicked(props.selectedIndex+1);
+                    }
                     break;
                 case "ArrowUp":
                     e.stopPropagation();
                     e.preventDefault();
-                    props.logItemClicked(Math.max(props.selectedIndex-1,0));
+                    if (props.selectedIndex > 0) {
+                        props.logItemClicked(props.selectedIndex-1);
+                    }
                     break;
                 default:
                     break;
@@ -40,26 +44,26 @@ function RunningLogsList(props) {
             </header>
             <table className={styles.RunningLogsListTable}>
                 <thead>
-                <tr>
-                    <th>Running date</th>
-                    <th>Job Name</th>
-                    <th>Step</th>
-                    <th>Checklist</th>
-                    <th># Actions</th>
-                    <th># Layers</th>
-                    <th># ACPs</th>
-                    <th>Running Time</th>
-                    <th>S3 bucket key (filename)</th>
-                </tr>
+                    <tr>
+                        <th>Running date</th>
+                        <th>Job Name</th>
+                        <th>Step</th>
+                        <th>Checklist</th>
+                        <th># Actions</th>
+                        <th># Layers</th>
+                        <th># ACPs</th>
+                        <th>Running Time</th>
+                        <th>S3 bucket key (filename)</th>
+                    </tr>
                 </thead>
                 <tbody>
-                {props.logsListData?.map( (data, index) =>
-                    <RunningLogsListItem key={index}
-                                         data={data}
-                                         selected={props.selectedIndex===index}
-                                         itemClicked={() => props.logItemClicked(index)}
-                    />
-                )}
+                    {props.logsListData?.map( (data, index) =>
+                        <RunningLogsListItem key={index}
+                                             data={data}
+                                             selected={props.selectedIndex===index}
+                                             itemClicked={() => props.logItemClicked(index)}
+                        />
+                    )}
                 </tbody>
             </table>
 

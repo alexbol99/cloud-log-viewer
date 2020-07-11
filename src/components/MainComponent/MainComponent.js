@@ -4,15 +4,13 @@ import RunningLogsList from "../RunningLogsList/RunningLogsList";
 import VegaLiteChart from "../VegaLiteChart/VegaLiteChart";
 import {getChartData, getListData} from "../../models/log-parser";
 
-// import axios from "axios";
-
 function MainComponent(props) {
     const [logDataArray, setLogDataArray] = useState([]);
-    const [logsListData, setLogsListData] = useState([]);
-
-    const [chartData, setChartData] = useState(null);
-    const [runData, setRunData] = useState(null);
     const [index, setIndex] = useState(0);
+
+    let logsListData = [];
+    let chartData = null;
+    let runData = null;
 
     async function loadFiles() {
         let logs_api_uri = "https://bah2tkltg6.execute-api.eu-central-1.amazonaws.com/test/list";
@@ -36,8 +34,9 @@ function MainComponent(props) {
     useEffect( () => {
         const fetchData = async () => {
             const localDataArray = await loadFiles();
+            // If all data loaded, render list and select first row
             if (localDataArray.length > 0) {
-                setLogDataArray(localDataArray);           // all the data
+                setLogDataArray(localDataArray);             // trigger rendering
             }
         };
 
@@ -46,30 +45,18 @@ function MainComponent(props) {
         }
     });
 
-    // Effect to update list to be displayed
-    useEffect( () => {
-        if (logDataArray.length > 0) {
-            const localLogsListData = logDataArray.map(data => getListData(data))
-            setLogsListData(localLogsListData)
-        }
-    }, [logDataArray])
-
-    // Effect to update chart on click on a row in the list
-    useEffect(() => {
-        if (logDataArray.length > 0) {
-            const localData = logDataArray[index];
-            const localChartData = localData.runningTime ? getChartData(localData) : null;
-            const localRunData = getListData(localData);
-
-            setChartData(localChartData);              // chart data for selected log in the list
-            setRunData(localRunData);                  // run data for selected row in the list, help to build chart
-        }
-    }, [logDataArray, index]);
-
-
-    // Effect to update current index
+    // Callback to set new chart data and update selected index
     const logItemClicked = (index) => {
-        setIndex(index);
+        setIndex(index);                                     // trigger rendering
+    }
+
+    // Setup data before rendering
+    if (logDataArray.length > 0) {
+        logsListData = logDataArray.map(data => getListData(data))
+
+        let localData = logDataArray[index];
+        chartData = localData.runningTime ? getChartData(localData) : null;
+        runData = getListData(localData);
     }
 
     return (

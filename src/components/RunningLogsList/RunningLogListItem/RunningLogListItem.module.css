@@ -12,7 +12,6 @@
 
 .RunningLogListItem a {
     text-decoration: none;
-    /*text-decoration-color: azure;*/
 }
 
 .RunningLogListItem a:link {
@@ -22,22 +21,4 @@
 
 .RunningLogListItemNumeric {
     text-align: center;
-}
-
-.RunningLogListItemJobName {
-    width: 40%;
-    max-width: 40%;
-}
-
-
-.RunningLogListItemNumActions {
-    width: 10%;
-}
-
-.RunningLogListItemNumLayers {
-    width: 10%;
-}
-
-.RunningLogListItemRunningTime {
-    width: 20%;
 }
