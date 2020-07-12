@@ -61,6 +61,7 @@ function RunningLogsList(props) {
                         <RunningLogsListItem key={index}
                                              data={data}
                                              selected={props.selectedIndex===index}
+                                             batchFailed={!!data.errorTime}
                                              itemClicked={() => props.logItemClicked(index)}
                         />
                     )}

@@ -9,7 +9,8 @@ function RunningLogsListItem(props) {
         }
     })
 
-    let style = props.selected ? styles.RunningLogListItemClicked : styles.RunningLogListItem
+    let style = props.selected ? styles.RunningLogListItemClicked : styles.RunningLogListItem;
+    style = props.batchFailed ? `${style} ${styles.RunningLogListItemFailed}` : style;
     let object_url = "https://s3.console.aws.amazon.com/s3/object/acp-cloud-logs/"+props.data.key;
 
     const scrollIntoView = () => {

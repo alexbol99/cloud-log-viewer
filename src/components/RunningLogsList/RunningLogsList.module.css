@@ -24,8 +24,7 @@
 }
 
 .RunningLogsList thead {
-    background-color: lightgray;
-    font-weight: unset;
+
 }
 
 .RunningLogsList tbody {
@@ -33,7 +32,11 @@
 }
 
 .RunningLogsList th {
-    /*position: sticky;*/
+    background-color: lightgray;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 2;
 }
 
 .RunningLogsList tr,td, th {
@@ -44,4 +47,18 @@
     margin-top: 0.5em;
     margin-bottom: 0.5em;
     border-bottom: 1px solid #282c34;
+}
+
+.RunningLogsList td {
+    animation-name: fadeIn;
+    animation-duration: 1s;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }

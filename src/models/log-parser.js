@@ -1,9 +1,10 @@
 export function parse(text) {
     const row_lines = text.split('\n');
     const arrayOfTimestamps = timestamps(row_lines);
+    const errorTimeString = errorTime(arrayOfTimestamps);
     return {
         runningDate: runningDate(row_lines),
-        runningTime: runningTime(row_lines),
+        runningTime: runningTime(row_lines, errorTimeString),
         jobName: jobName(row_lines),
         batch: batch(arrayOfTimestamps),
         uploadTime: uploadTime(arrayOfTimestamps),
@@ -28,16 +29,15 @@ function runningDate(row_lines) {
     return new Date(Date.UTC(year, month - 1, day, hour, min)).toUTCString();
 }
 
-function runningTime(row_lines) {
+function runningTime(row_lines, errorTime) {
     let job_started_line = row_lines
         .filter(line => line.match("Ready for commands"))[0];
     let start_time = JSON.parse(job_started_line).time;
+
     let job_ended_line = row_lines
         .filter(line => line.match("Job is ready"));
-    if (job_ended_line.length === 0)
-        return null;
 
-    let end_time = JSON.parse(job_ended_line).time;
+    let end_time = job_ended_line.length > 0 ? JSON.parse(job_ended_line).time : errorTime;
 
     return secToHHMMSS(
         time_diff(start_time, end_time))
@@ -49,7 +49,7 @@ export function getChartData(data) {
             a => a.Stage === action.Stage && a.Index === action.StageIndex
         );
         return {
-            Object: "Acp",
+            Object: timestamp.Succeed ? "Acp" : "Acp Failed",
             ActNum: action.ActNum,
             Name: action.AnalysisName,
             Layer: action.LayerName,
@@ -63,22 +63,6 @@ export function getChartData(data) {
         };
     });
 
-    let splitterObj = {
-        Object: "Splitter",
-        Name: "Splitter",
-        Index: 0,
-        StartDate: new Date(`01/01/1970 ${data.splitterTime.StartTime}`),
-        EndDate: new Date(`01/01/1970 ${data.splitterTime.CompleteTime}`)
-    };
-
-    let mergerObj = {
-        Object: "Merger",
-        Name: "Merger",
-        Index: stats.length + 1,
-        StartDate: new Date(`01/01/1970 ${data.mergerTime.StartTime}`),
-        EndDate: new Date(`01/01/1970 ${data.mergerTime.CompleteTime}`)
-    };
-
     let uploadObj = {
         Object: "Upload",
         Name: "Upload",
@@ -87,16 +71,40 @@ export function getChartData(data) {
         EndDate: new Date(`01/01/1970 ${data.uploadTime.CompleteTime}`)
     };
 
-    let downloadObj = {
-        Object: "Download",
-        Name: "Download",
-        Index: stats.length + 2,
-        StartDate: new Date(`01/01/1970 ${data.downloadTime.StartTime}`),
-        EndDate: new Date(`01/01/1970 ${data.downloadTime.CompleteTime}`)
+    let splitterObj = {
+        Object: "Splitter",
+        Name: "Splitter",
+        Index: 0,
+        StartDate: new Date(`01/01/1970 ${data.splitterTime.StartTime}`),
+        EndDate: new Date(`01/01/1970 ${data.splitterTime.CompleteTime}`)
     };
 
-    // stats = [uploadObj, splitterObj, ...stats, mergerObj, downloadTime];
-    stats = [uploadObj, splitterObj, ...stats, mergerObj, downloadObj];
+    let mergerObj;
+    if (data.mergerTime.StartTime && data.mergerTime.CompleteTime) {
+        mergerObj = {
+            Object: "Merger",
+            Name: "Merger",
+            Index: stats.length + 1,
+            StartDate: new Date(`01/01/1970 ${data.mergerTime.StartTime}`),
+            EndDate: new Date(`01/01/1970 ${data.mergerTime.CompleteTime}`)
+        };
+    }
+
+    let downloadObj;
+    if (data.downloadTime.StartTime && data.downloadTime.CompleteTime) {
+        downloadObj = {
+            Object: "Download",
+            Name: "Download",
+            Index: stats.length + 2,
+            StartDate: new Date(`01/01/1970 ${data.downloadTime.StartTime}`),
+            EndDate: new Date(`01/01/1970 ${data.downloadTime.CompleteTime}`)
+        };
+    }
+
+    stats = [uploadObj, splitterObj, ...stats];
+    if (mergerObj) stats = [...stats, mergerObj];
+    if (downloadObj) stats = [...stats, downloadObj];
+
     return stats;
 }
 
@@ -113,6 +121,7 @@ export function getListData(localData) {
         runningTime: localData?.runningTime,
         batchJobsNum: localData?.batch.length,
         key: localData?.key,
+        errorTime: localData?.errorTime
     }
 }
 
@@ -146,16 +155,14 @@ function splitterTime(arrayOfTimestamps) {
 
 function mergerTime(arrayOfTimestamps) {
     let merger = arrayOfTimestamps.filter(d => d.object === "Merger");
-    if (!merger) return null
+    // if (!merger) return null
 
-    let mergerStartedMessage = merger.find(s => s.message === "Preparing job for merge");
+    let mergerStartMessage = merger.find(s => s.message === "Preparing job for merge");
     let mergerCompleteMessage = merger.find(s => s.message === "Moving Job to S3");
 
-    if (!mergerStartedMessage || !mergerCompleteMessage) return null;
-
     let s = {
-        StartTime: toLocal(mergerStartedMessage.time),
-        CompleteTime: toLocal(mergerCompleteMessage.time)
+        StartTime: mergerStartMessage ? toLocal(mergerStartMessage.time) : null,
+        CompleteTime: mergerCompleteMessage ? toLocal(mergerCompleteMessage.time) : null
     };
     return s;
 }
@@ -163,16 +170,16 @@ function mergerTime(arrayOfTimestamps) {
 function downloadTime(arrayOfTimestamps) {
     let downloadStartMessage = arrayOfTimestamps.find(d => d.object === "WebClient" && d.message === "Download Data");
     let downloadCompleteMessage = arrayOfTimestamps.find(d => d.object === "WebClient" && d.message === "Job is ready");
-    if (!downloadStartMessage || !downloadCompleteMessage) return null;
 
     let downloadTime = {
-        StartTime: downloadStartMessage.time,
-        CompleteTime: downloadCompleteMessage.time
+        StartTime: downloadStartMessage ? downloadStartMessage.time : null,
+        CompleteTime: downloadCompleteMessage ? downloadCompleteMessage.time : null
     };
     return downloadTime;
 }
 
 function acpTime(arrayOfTimestamps) {
+    let errorTimeStr = errorTime(arrayOfTimestamps);
     let acp = arrayOfTimestamps.filter(d => d.type === "Progress");
     let acp_transformed = acp.map(action => {
         let message = action.message.split(' ');
@@ -207,14 +214,23 @@ function acpTime(arrayOfTimestamps) {
             c => c.Stage === action.Stage && c.Index === action.Index
         );
 
-        return completeTimeMessage ? {
+        return {
             Stage: action.Stage,
             Index: action.Index,
             StartTime: action.StartTime,
-            CompleteTime: completeTimeMessage.CompleteTime
-        }  : null;
+            CompleteTime: completeTimeMessage ? completeTimeMessage.CompleteTime : errorTimeStr,
+            Succeed: !!completeTimeMessage
+        };
     });
     return acp_timestamp;
+}
+
+function errorTime(arrayOfTimestamps) {
+    let errorMessage = arrayOfTimestamps.find(
+        d => d.object === "WebClient" && d.type === "ERROR"
+    );
+    let errorTime = errorMessage ? errorMessage.time : null;
+    return errorTime;
 }
 
 function timestamps(row_lines) {
