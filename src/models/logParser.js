@@ -11,8 +11,9 @@ export function parse(text) {
         splitterTime: splitterTime(arrayOfTimestamps),
         acpTime: acpTime(arrayOfTimestamps),
         mergerTime: mergerTime(arrayOfTimestamps),
-        downloadTime: downloadTime(arrayOfTimestamps)
-    }
+        downloadTime: downloadTime(arrayOfTimestamps),
+        errorTime: errorTimeString
+    };
 }
 
 function jobName(row_lines) {
@@ -25,7 +26,10 @@ function runningDate(row_lines) {
     let arrayOfLines = row_lines.filter(line => line.match("time"));
     let splitArray = arrayOfLines[0].split(' ');
     let [day, month, year] = splitArray[1].split(':')[1].split('/');
+    if (day.length > 2) day = day.substr(1);
     let [hour, min] = splitArray[2].split(':');
+    if (hour.length > 2) hour = hour.substr(1);
+    if (min.length > 2) min = min.substr(1);
     return new Date(Date.UTC(year, month - 1, day, hour, min)).toUTCString();
 }
 
@@ -33,100 +37,73 @@ function runningTime(row_lines, errorTime) {
     let job_started_line = row_lines
         .filter(line => line.match("Ready for commands"))[0];
     let start_time = JSON.parse(job_started_line).time;
-
     let job_ended_line = row_lines
         .filter(line => line.match("Job is ready"));
-
     let end_time = job_ended_line.length > 0 ? JSON.parse(job_ended_line).time : errorTime;
 
     return secToHHMMSS(
-        time_diff(start_time, end_time))
+        time_diff(start_time, end_time));
 }
 
-export function getChartData(data) {
-    let stats = data.batch.map(action => {
-        let timestamp = data.acpTime.find(
-            a => a.Stage === action.Stage && a.Index === action.StageIndex
-        );
-        return {
-            Object: timestamp.Succeed ? "Acp" : "Acp Failed",
-            ActNum: action.ActNum,
-            Name: action.AnalysisName,
-            Layer: action.LayerName,
-            Stage: action.Stage,
-            Index: action.Stage + '_' + action.StageIndex,
-            StartTime: timestamp ? timestamp.StartTime : "",
-            CompleteTime: timestamp ? timestamp.CompleteTime : "",
-            Time: time_diff(timestamp.StartTime, timestamp.CompleteTime),
-            StartDate: new Date(`01/01/1970 ${timestamp.StartTime}`),
-            EndDate: new Date(`01/01/1970 ${timestamp.CompleteTime}`)
-        };
-    });
+// export function getChartData(data) {
+//     let stats = data.batch.map(action => {
+//         let timestamp = data.acpTime.find(
+//             a => a.Stage === action.Stage && a.Index === action.StageIndex
+//         );
+//         return {
+//             Object: "Acp",
+//             ActNum: action.ActNum,
+//             Name: action.AnalysisName,
+//             Layer: action.LayerName,
+//             Stage: action.Stage,
+//             Index: action.StageIndex,
+//             StartTime: timestamp ? timestamp.StartTime : "",
+//             CompleteTime: timestamp ? timestamp.CompleteTime : "",
+//             Time: time_diff(timestamp.StartTime, timestamp.CompleteTime),
+//             StartDate: new Date(`01/01/1970 ${timestamp.StartTime}`),
+//             EndDate: new Date(`01/01/1970 ${timestamp.CompleteTime}`)
+//         };
+//     });
 
-    let uploadObj = {
-        Object: "Upload",
-        Name: "Upload",
-        Index: -1,
-        StartDate: new Date(`01/01/1970 ${data.uploadTime.StartTime}`),
-        EndDate: new Date(`01/01/1970 ${data.uploadTime.CompleteTime}`)
-    };
+//     let splitterObj = {
+//         Object: "Splitter",
+//         Name: "Splitter",
+//         Index: 0,
+//         StartDate: new Date(`01/01/1970 ${data.splitterTime.StartTime}`),
+//         EndDate: new Date(`01/01/1970 ${data.splitterTime.CompleteTime}`)
+//     };
 
-    let splitterObj = {
-        Object: "Splitter",
-        Name: "Splitter",
-        Index: 0,
-        StartDate: new Date(`01/01/1970 ${data.splitterTime.StartTime}`),
-        EndDate: new Date(`01/01/1970 ${data.splitterTime.CompleteTime}`)
-    };
+//     let mergerObj = {
+//         Object: "Merger",
+//         Name: "Merger",
+//         Index: stats.length + 1,
+//         StartDate: new Date(`01/01/1970 ${data.mergerTime.StartTime}`),
+//         EndDate: new Date(`01/01/1970 ${data.mergerTime.CompleteTime}`)
+//     };
 
-    let mergerObj;
-    if (data.mergerTime.StartTime && data.mergerTime.CompleteTime) {
-        mergerObj = {
-            Object: "Merger",
-            Name: "Merger",
-            Index: stats.length + 1,
-            StartDate: new Date(`01/01/1970 ${data.mergerTime.StartTime}`),
-            EndDate: new Date(`01/01/1970 ${data.mergerTime.CompleteTime}`)
-        };
-    }
+//     let uploadObj = {
+//         Object: "Upload",
+//         Name: "Upload",
+//         Index: -1,
+//         StartDate: new Date(`01/01/1970 ${data.uploadTime.StartTime}`),
+//         EndDate: new Date(`01/01/1970 ${data.uploadTime.CompleteTime}`)
+//     };
 
-    let downloadObj;
-    if (data.downloadTime.StartTime && data.downloadTime.CompleteTime) {
-        downloadObj = {
-            Object: "Download",
-            Name: "Download",
-            Index: stats.length + 2,
-            StartDate: new Date(`01/01/1970 ${data.downloadTime.StartTime}`),
-            EndDate: new Date(`01/01/1970 ${data.downloadTime.CompleteTime}`)
-        };
-    }
+//     let downloadObj = {
+//         Object: "Download",
+//         Name: "Download",
+//         Index: stats.length + 2,
+//         StartDate: new Date(`01/01/1970 ${data.downloadTime.StartTime}`),
+//         EndDate: new Date(`01/01/1970 ${data.downloadTime.CompleteTime}`)
+//     };
 
-    stats = [uploadObj, splitterObj, ...stats];
-    if (mergerObj) stats = [...stats, mergerObj];
-    if (downloadObj) stats = [...stats, downloadObj];
-
-    return stats;
-}
-
-export function getListData(localData) {
-    const actionsNum = localData?.batch[localData.batch.length - 1].ActNum;
-    const layersNum = new Set(localData?.batch.map(action => action.LayerName)).size;
-    return {
-        runningDate: localData?.runningDate,
-        jobName: localData?.jobName,
-        step: localData?.batch[0].StepName,
-        checklist: localData?.batch[0].ChecklistName,
-        actionsNum: actionsNum,
-        layersNum: layersNum,
-        runningTime: localData?.runningTime,
-        batchJobsNum: localData?.batch.length,
-        key: localData?.key,
-        errorTime: localData?.errorTime
-    }
-}
+//     // stats = [uploadObj, splitterObj, ...stats, mergerObj, downloadTime];
+//     stats = [uploadObj, splitterObj, ...stats, mergerObj, downloadObj];
+//     return stats;
+// }
 
 function batch(arrayOfTimestamps) {
-    let batchObject = arrayOfTimestamps.filter(d => d.type === "Batch")[0]
+    let batchObject = arrayOfTimestamps.filter(d => d.type === "Batch")[0];
     return JSON.parse(batchObject.message);
 }
 
@@ -170,7 +147,6 @@ function mergerTime(arrayOfTimestamps) {
 function downloadTime(arrayOfTimestamps) {
     let downloadStartMessage = arrayOfTimestamps.find(d => d.object === "WebClient" && d.message === "Download Data");
     let downloadCompleteMessage = arrayOfTimestamps.find(d => d.object === "WebClient" && d.message === "Job is ready");
-
     let downloadTime = {
         StartTime: downloadStartMessage ? downloadStartMessage.time : null,
         CompleteTime: downloadCompleteMessage ? downloadCompleteMessage.time : null

@@ -2,7 +2,8 @@ import React, {useEffect, useState} from 'react';
 import styles from './MainComponent.module.css';
 import RunningLogsList from "../RunningLogsList/RunningLogsList";
 import VegaLiteChart from "../VegaLiteChart/VegaLiteChart";
-import {getChartData, getListData} from "../../models/log-parser";
+import {getChartData, getListData} from "../../models/logData";
+import {parse} from "../../models/logParser";
 
 function MainComponent(props) {
     const [logDataArray, setLogDataArray] = useState([]);
@@ -22,7 +23,8 @@ function MainComponent(props) {
         let promises = keys_list.map (key => fetch(`${logs_api_uri}/${key}`))
         let respArray = await Promise.all(promises)
         let json_promises = respArray.map(resp => resp.json())
-        let dataArray = await Promise.all(json_promises);
+        let textArray = await Promise.all(json_promises);
+        let dataArray = textArray.map( e => parse(e.text));
         dataArray.forEach( (data,i) => data.key = keys_list[i] )
         dataArray.sort(function(a,b){
             return new Date(b.runningDate) - new Date(a.runningDate);
