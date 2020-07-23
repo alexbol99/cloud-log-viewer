@@ -156,7 +156,7 @@ function downloadTime(arrayOfTimestamps) {
 
 function acpTime(arrayOfTimestamps) {
     let errorTimeStr = errorTime(arrayOfTimestamps);
-    let acp = arrayOfTimestamps.filter(d => d.type === "Progress");
+    let acp = arrayOfTimestamps.filter(d => (d.type === "Progress" || d.type === "Info") && d.object === "ACP");
     let acp_transformed = acp.map(action => {
         let message = action.message.split(' ');
         let localTime = toLocal(action.time);
@@ -164,7 +164,7 @@ function acpTime(arrayOfTimestamps) {
             Time: localTime,
             Step: message[0],
             Stage: message[1].split(':')[1],
-            Index: Number(message[2].split(':')[1])
+            Index: Number(message[2].split(':')[1]) + 1
         };
     });
     let acp_started = acp_transformed
@@ -177,7 +177,7 @@ function acpTime(arrayOfTimestamps) {
             };
         });
     let acp_completed = acp_transformed
-        .filter(action => action.Step === "Completed")
+        .filter(action => action.Step === "Completing")
         .map(action => {
             return {
                 Stage: action.Stage,

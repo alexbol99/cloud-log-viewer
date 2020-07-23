@@ -1,24 +1,142 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="eb5666f8-fa31-4b81-a449-ca177696146b" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/logParser.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/logParser.js" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="JsFlowSettings">
     <service-enabled>true</service-enabled>
     <exe-path />
     <other-services-enabled>true</other-services-enabled>
     <auto-save>true</auto-save>
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="21" />
-    <option name="y" value="27" />
-    <option name="width" value="1199" />
-    <option name="height" value="677" />
+  <component name="ProjectId" id="1eFwVDHQ5jW4axxkSb4Vk8RFHB8" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
     <property name="JavaScriptPreferStrict" value="false" />
     <property name="JavaScriptWeakerCompletionTypeGuess" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_interpreter_path" value="node" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="/usr/local/bin/node" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="Settings.JavaScript" />
+  </component>
+  <component name="RunManager">
+    <configuration name="start" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="start" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="npm.start" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="eb5666f8-fa31-4b81-a449-ca177696146b" name="Default Changelist" comment="" />
+      <created>1593930669636</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1593930669636</updated>
+      <workItem from="1593930670829" duration="2911000" />
+      <workItem from="1594112602722" duration="16325000" />
+      <workItem from="1595402793218" duration="662000" />
+      <workItem from="1595511263656" duration="1492000" />
+    </task>
+    <task id="LOCAL-00001" summary="- chart remove fixed height">
+      <created>1593938043163</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1593938043163</updated>
+    </task>
+    <task id="LOCAL-00002" summary="- redesign to use api gateway">
+      <created>1594141835801</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1594141835801</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="2" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="- chart remove fixed height" />
+    <MESSAGE value="- redesign to use api gateway" />
+    <option name="LAST_COMMIT_MESSAGE" value="- redesign to use api gateway" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="617" y="94" width="1018" height="823" key="CommitChangelistDialog2" timestamp="1594141834988">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="617" y="94" width="1018" height="823" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1593938042455" />
+    <state x="617" y="94" key="CommitChangelistDialog2/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1594141834988" />
+    <state width="1717" height="193" key="GridCell.Tab.0.bottom" timestamp="1595511305102">
+      <screen x="1920" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1717" height="193" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1594824351482" />
+    <state width="1717" height="193" key="GridCell.Tab.0.bottom/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1594127751944" />
+    <state width="1717" height="193" key="GridCell.Tab.0.bottom/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1595511305102" />
+    <state width="1717" height="193" key="GridCell.Tab.0.center" timestamp="1595511305102">
+      <screen x="1920" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1717" height="193" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1594824351482" />
+    <state width="1717" height="193" key="GridCell.Tab.0.center/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1594127751944" />
+    <state width="1717" height="193" key="GridCell.Tab.0.center/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1595511305102" />
+    <state width="1717" height="193" key="GridCell.Tab.0.left" timestamp="1595511305101">
+      <screen x="1920" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1717" height="193" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1594824351482" />
+    <state width="1717" height="193" key="GridCell.Tab.0.left/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1594127751944" />
+    <state width="1717" height="193" key="GridCell.Tab.0.left/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1595511305101" />
+    <state width="1717" height="193" key="GridCell.Tab.0.right" timestamp="1595511305102">
+      <screen x="1920" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1717" height="193" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1594824351482" />
+    <state width="1717" height="193" key="GridCell.Tab.0.right/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1594127751944" />
+    <state width="1717" height="193" key="GridCell.Tab.0.right/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1595511305102" />
+    <state x="583" y="258" key="Vcs.Push.Dialog.v2" timestamp="1594141837577">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="583" y="258" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1593938044684" />
+    <state x="583" y="258" key="Vcs.Push.Dialog.v2/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1594141837577" />
+    <state x="2692" y="421" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1595511276601">
+      <screen x="1920" y="0" width="1920" height="1040" />
+    </state>
+    <state x="2692" y="421" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1595511276601" />
   </component>
 </project>
