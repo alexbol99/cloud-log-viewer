@@ -34,7 +34,7 @@ function VegaLiteChart(props) {
         <div className={styles.VegaLiteChart}>
             {
                 props.data && props.runData.runningTime ?
-                    <VegaLite spec={spec} data={props.data}/> : "No data"
+                    <VegaLite spec={spec} data={props.data}/> : null
             }
         </div>
     );

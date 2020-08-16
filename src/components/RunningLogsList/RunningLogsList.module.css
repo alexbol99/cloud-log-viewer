@@ -5,16 +5,6 @@
     -webkit-font-smoothing: antialiased;
 }
 
-.RunningLogsList header {
-    font-size: larger;
-    padding-left: 0.5em;
-    margin-bottom: 0.5em;
-}
-
-.RunningLogsList span {
-    margin-right: 0.5em;
-}
-
 .RunningLogsListTable {
     height: 320px;
     display: block;

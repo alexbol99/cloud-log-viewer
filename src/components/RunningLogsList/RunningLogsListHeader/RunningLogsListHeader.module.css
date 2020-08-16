@@ -1,0 +1,10 @@
+.RunningLogsListHeader {
+    font-size: larger;
+    padding-left: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+.RunningLogsListHeader span {
+    margin-right: 0.5em;
+}
+

@@ -8,12 +8,13 @@ import {parse} from "../../models/logParser";
 function MainComponent(props) {
     const [logDataArray, setLogDataArray] = useState([]);
     const [index, setIndex] = useState(0);
+    const [loading, setLoading] = useState(false);
 
     let logsListData = [];
     let chartData = null;
     let runData = null;
 
-    async function loadFiles() {
+    const loadFiles = async() => {
         let logs_api_uri = "https://bah2tkltg6.execute-api.eu-central-1.amazonaws.com/test/list";
 
         let response = await fetch(logs_api_uri);
@@ -32,16 +33,18 @@ function MainComponent(props) {
         return dataArray;
     }
 
+    const fetchData = async () => {
+        setLoading(true);
+        const localDataArray = await loadFiles();
+        // If all data loaded, render list and select first row
+        if (localDataArray.length > 0) {
+            setLoading(false);
+            setLogDataArray(localDataArray);             // trigger rendering
+        }
+    };
+
     // Effect to load all data from AWS s3
     useEffect( () => {
-        const fetchData = async () => {
-            const localDataArray = await loadFiles();
-            // If all data loaded, render list and select first row
-            if (localDataArray.length > 0) {
-                setLogDataArray(localDataArray);             // trigger rendering
-            }
-        };
-
         if (logDataArray.length === 0) {
             fetchData();
         }
@@ -50,6 +53,11 @@ function MainComponent(props) {
     // Callback to set new chart data and update selected index
     const logItemClicked = (index) => {
         setIndex(index);                                     // trigger rendering
+    }
+
+    const reload = () => {
+        fetchData()
+        // setLoading(true)
     }
 
     // Setup data before rendering
@@ -66,7 +74,10 @@ function MainComponent(props) {
             <RunningLogsList
                 logsListData={logsListData}
                 selectedIndex={index}
-                logItemClicked={logItemClicked}/>
+                loading={loading}
+                logItemClicked={logItemClicked}
+                onRefreshButtonPressed={reload}
+            />
             <VegaLiteChart data={chartData} runData={runData} />
         </main>
     );

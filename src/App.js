@@ -5,7 +5,7 @@ import './App.css';
 function App() {
     return (
         <div className="App">
-            <h1>Cloud Running Logs</h1>
+            <h1>DFM Cloud Monitor</h1>
             <hr/>
             <MainComponent />
         </div>
