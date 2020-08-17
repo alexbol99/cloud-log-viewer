@@ -10,6 +10,8 @@ export function getChartData(data) {
             Layer: action.LayerName,
             Stage: action.Stage,
             Index: action.Stage + '_' + action.StageIndex,
+            BeginNf: action.BeginNf,
+            EndNf: action.EndNf,
             StartTime: timestamp ? timestamp.StartTime : "",
             CompleteTime: timestamp ? timestamp.CompleteTime : "",
             Time: time_diff(timestamp.StartTime, timestamp.CompleteTime),

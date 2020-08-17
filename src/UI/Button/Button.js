@@ -8,7 +8,7 @@ const button = (props) => {
     // let buttonStyle = props.mobileOnly ? classes["Button","DrawerButton"] : classes["Button"];
     return (
         <button title={props.title} onClick={props.onClick} className={classes.Button}>
-            <FontAwesomeIcon icon={faSyncAlt} size="2x" spin={props.spin} />
+            <FontAwesomeIcon icon={faSyncAlt} size="2x" spin={props.spin}  />
         </button>
     );
 };
