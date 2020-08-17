@@ -1,7 +1,7 @@
 export function parse(text) {
     const row_lines = text.split('\n');
     const arrayOfTimestamps = timestamps(row_lines);
-    const errorTimeString = errorTime(arrayOfTimestamps);
+    const errorTimeString = errorTime(row_lines, arrayOfTimestamps);
     return {
         runningDate: runningDate(row_lines),
         runningTime: runningTime(row_lines, errorTimeString),
@@ -9,7 +9,7 @@ export function parse(text) {
         batch: batch(arrayOfTimestamps),
         uploadTime: uploadTime(arrayOfTimestamps),
         splitterTime: splitterTime(arrayOfTimestamps),
-        acpTime: acpTime(arrayOfTimestamps),
+        acpTime: acpTime(row_lines, arrayOfTimestamps),
         mergerTime: mergerTime(arrayOfTimestamps),
         downloadTime: downloadTime(arrayOfTimestamps),
         errorTime: errorTimeString
@@ -41,8 +41,8 @@ function runningTime(row_lines, errorTime) {
         .filter(line => line.match("Job is ready"));
     let end_time = job_ended_line.length > 0 ? JSON.parse(job_ended_line).time : errorTime;
 
-    return secToHHMMSS(
-        time_diff(start_time, end_time));
+    return end_time ? secToHHMMSS(
+        time_diff(start_time, end_time)) : "";
 }
 
 // export function getChartData(data) {
@@ -154,8 +154,8 @@ function downloadTime(arrayOfTimestamps) {
     return downloadTime;
 }
 
-function acpTime(arrayOfTimestamps) {
-    let errorTimeStr = errorTime(arrayOfTimestamps);
+function acpTime(row_lines, arrayOfTimestamps) {
+    let errorTimeStr = errorTime(row_lines, arrayOfTimestamps);
     let acp = arrayOfTimestamps.filter(d => (d.type === "Progress" || d.type === "Info") && d.object === "ACP");
     let acp_transformed = acp.map(action => {
         let message = action.message.split(' ');
@@ -201,11 +201,20 @@ function acpTime(arrayOfTimestamps) {
     return acp_timestamp;
 }
 
-function errorTime(arrayOfTimestamps) {
+function errorTime(row_lines, arrayOfTimestamps) {
     let errorMessage = arrayOfTimestamps.find(
         d => d.object === "WebClient" && d.type === "ERROR"
     );
-    let errorTime = errorMessage ? errorMessage.time : null;
+
+    let errorTime = null;
+    if (errorMessage) {
+        errorTime = errorMessage.time
+    }
+    // else {
+    //     let ping_lines = row_lines
+    //         .filter(line => line.match("I am alive"));
+    //     errorTime = ping_lines.length > 0 ? JSON.parse(ping_lines[ping_lines.length - 1]).Time : null;
+    // }
     return errorTime;
 }
 

@@ -65,7 +65,13 @@ function MainComponent(props) {
         logsListData = logDataArray.map(data => getListData(data))
 
         let localData = logDataArray[index];
-        chartData = localData.runningTime ? getChartData(localData) : null;
+        try {
+            chartData = getChartData(localData);
+        }
+        catch (e) {
+            chartData = null;
+        }
+
         runData = getListData(localData);
     }
 
