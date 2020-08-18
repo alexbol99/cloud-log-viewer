@@ -34,6 +34,14 @@
   color: #61dafb;
 }
 
+.content {
+  min-height: calc(100vh - 100px);
+}
+
+.footer {
+  height: 20px;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

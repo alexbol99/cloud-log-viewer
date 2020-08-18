@@ -6,7 +6,7 @@
 }
 
 .RunningLogsListTable {
-    height: 320px;
+    height: 35vh;
     display: block;
     overflow-y: auto;
     font-weight: bolder;
