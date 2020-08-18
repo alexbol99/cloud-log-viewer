@@ -5,11 +5,12 @@ export function getChartData(data) {
         );
         return {
             Object: timestamp.Succeed ? "Acp" : "Acp Failed",
+            Stage: action.Stage,
+            Index: action.Stage + '_' + action.StageIndex,
             ActNum: action.ActNum,
             Name: action.AnalysisName,
             Layer: action.LayerName,
-            Stage: action.Stage,
-            Index: action.Stage + '_' + action.StageIndex,
+            ActParam: action.ActParam,
             BeginNf: action.BeginNf,
             EndNf: action.EndNf,
             StartTime: timestamp ? timestamp.StartTime : "",

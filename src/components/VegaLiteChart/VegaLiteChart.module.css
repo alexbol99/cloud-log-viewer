@@ -1,4 +1,6 @@
 .VegaLiteChart {
     flex: 1;
     margin-top: 2em;
+    height: 280px;
+    overflow-y: auto;
 }

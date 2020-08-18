@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from '../../../UI/Button/Button';
+import { faSyncAlt } from '@fortawesome/free-solid-svg-icons'
 
 import styles from './RunningLogsListHeader.module.css'
 
@@ -15,8 +16,8 @@ function RunningLogsListHeader(props) {
             </span>
             <span>
                 <Button
-                    title="Refresh"
-                    iconName="sync-alt"
+                    title="Reload logs from S3 bucket"
+                    icon={faSyncAlt}
                     spin={props.loading}
                     onClick={props.onRefreshButtonPressed}
                 />

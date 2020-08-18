@@ -6,8 +6,10 @@ function App() {
     return (
         <div className="App">
             <h1>DFM Cloud Monitor</h1>
-            <hr/>
+            <hr />
             <MainComponent />
+            <hr />
+            <p style={{fontSize:"12px"}}>Alex Bol 2020</p>
         </div>
     );
 }

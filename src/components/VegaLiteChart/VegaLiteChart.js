@@ -4,6 +4,7 @@ import styles from './VegaLiteChart.module.css';
 
 function VegaLiteChart(props) {
     const spec = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
         title: props.runData?.jobName,
         data: { values: props.data },
         mark: { type: "bar", tooltip: [] },
