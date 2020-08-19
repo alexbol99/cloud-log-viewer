@@ -27,6 +27,7 @@ function MainComponent(props) {
         let textArray = await Promise.all(json_promises);
         let dataArray = textArray.map( e => parse(e.text));
         dataArray.forEach( (data,i) => data.key = keys_list[i] )
+        dataArray.forEach( (data,i) => data.text = textArray[i].text )
         dataArray.sort(function(a,b){
             return new Date(b.runningDate) - new Date(a.runningDate);
         });
@@ -50,14 +51,15 @@ function MainComponent(props) {
         }
     });
 
-    // Callback to set new chart data and update selected index
-    const logItemClicked = (index) => {
-        setIndex(index);                                     // trigger rendering
-    }
-
     const reload = () => {
         fetchData()
         // setLoading(true)
+    }
+
+
+    // Callback to set new chart data and update selected index
+    const logItemClicked = (index) => {
+        setIndex(index);                                     // trigger rendering
     }
 
     // Setup data before rendering

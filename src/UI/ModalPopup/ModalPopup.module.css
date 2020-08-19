@@ -1,0 +1,45 @@
+.BackDrop {
+    background-color: rgba(0,0,0,0.2);
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+}
+
+.ModalPopup {
+    background-color: rgba(240, 240, 240, 1.0);
+    padding: 0.8em;
+    border-color: rgba(147, 128, 108, 0.1);
+    border-width: 0.1em;
+    border-top-width: 2.4em;
+    border-style: solid;
+    border-radius: 5px;
+    font-size: 16px;
+    position: absolute;
+    top: 4em;
+    animation-name: fadeIn;
+    animation-duration: 0.5s;
+}
+
+.ModalPopup header {
+    position: absolute;
+    top: -2em;
+    font-weight: bolder;
+    cursor: move;
+    /*opacity: 30%;*/
+    /*color: darkgrey;*/
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}

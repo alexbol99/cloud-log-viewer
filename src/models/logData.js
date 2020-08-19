@@ -80,7 +80,8 @@ export function getListData(localData) {
         runningTime: localData?.runningTime,
         batchJobsNum: localData?.batch.length,
         key: localData?.key,
-        errorTime: localData?.errorTime
+        errorTime: localData?.errorTime,
+        text: localData?.text
     }
 }
 

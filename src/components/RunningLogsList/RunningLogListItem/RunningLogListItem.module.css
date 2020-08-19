@@ -14,13 +14,19 @@
     color: crimson;
 }
 
-.RunningLogListItem a {
-    text-decoration: none;
+.RunningLogListItem div {
+    /*text-decoration: none;*/
+    cursor: pointer;
 }
 
 .RunningLogListItem a:link {
-    text-decoration: none;
+    /*text-decoration: none;*/
     color: inherit;
+    cursor: pointer;
+}
+
+.RunningLogListItemClicked div {
+    cursor: pointer;
 }
 
 .RunningLogListItemNumeric {

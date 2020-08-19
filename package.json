@@ -13,6 +13,7 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-fontawesome": "^1.7.1",
+    "react-infinite-scroll-component": "^5.0.5",
     "react-scripts": "3.4.1",
     "react-vega": "^7.3.0",
     "vega": "^5.13.0",

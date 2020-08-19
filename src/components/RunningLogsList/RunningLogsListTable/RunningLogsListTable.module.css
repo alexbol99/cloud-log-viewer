@@ -1,0 +1,47 @@
+.RunningLogsListTable {
+    height: 35vh;
+    display: block;
+    overflow-y: auto;
+    font-weight: bolder;
+    font-size: smaller;
+}
+
+.RunningLogsListTable thead {
+
+}
+
+.RunningLogsListTable tbody {
+    overflow-y: auto;
+}
+
+.RunningLogsListTable th {
+    background-color: lightgray;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+.RunningLogsListTable tr,td, th {
+    padding-bottom: 0.8em;
+    padding-top: 0.8em;
+    padding-left: 0.3em;
+    padding-right: 1.3em;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    border-bottom: 1px solid #282c34;
+}
+
+.RunningLogsListTable td {
+    animation-name: fadeIn;
+    animation-duration: 1s;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
