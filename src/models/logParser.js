@@ -28,8 +28,8 @@ function runningDate(row_lines) {
     let [day, month, year] = splitArray[1].split(':')[1].split('/');
     if (day.length > 2) day = day.substr(1);
     let [hour, min] = splitArray[2].split(':');
-    if (hour.length > 2) hour = hour.substr(1);
-    if (min.length > 2) min = min.substr(1);
+    if (hour.trim().length > 2) hour = hour.substr(1);
+    if (min.trim().length > 2) min = min.substr(1);
     return new Date(Date.UTC(year, month - 1, day, hour, min)).toUTCString();
 }
 
