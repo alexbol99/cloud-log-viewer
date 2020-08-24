@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "d2ea1218193ed619804de3c0d5e03171",
+    "revision": "5513a0e825cd27a7ce957e5c52cf6c8a",
     "url": "/dfms-running-chart/index.html"
   },
   {
-    "revision": "9e5a5b7ada3483c568fb",
+    "revision": "b9af3b77d63acc3cc56c",
     "url": "/dfms-running-chart/static/css/main.2bc0f5b8.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/dfms-running-chart/static/js/2.35604edf.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "9e5a5b7ada3483c568fb",
-    "url": "/dfms-running-chart/static/js/main.24066de6.chunk.js"
+    "revision": "b9af3b77d63acc3cc56c",
+    "url": "/dfms-running-chart/static/js/main.7a02f161.chunk.js"
   },
   {
     "revision": "b8a9a63704df12f8fa29",
