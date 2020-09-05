@@ -7,6 +7,7 @@ function RunningLogsList(props) {
     return (
         <div className={styles.RunningLogsList}>
             <RunningLogsListHeader
+                awsRegion = {props.awsRegion}
                 loading={props.loading}
                 onRefreshButtonPressed={props.onRefreshButtonPressed}
             />
@@ -15,6 +16,7 @@ function RunningLogsList(props) {
                 logsListData={props.logsListData}
                 selectedIndex={props.selectedIndex}
                 logItemClicked={props.logItemClicked}
+                fetchMoreData={props.onRefreshButtonPressed}
             />
 
         </div>

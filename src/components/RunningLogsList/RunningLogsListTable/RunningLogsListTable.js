@@ -34,14 +34,15 @@ function RunningLogsListTable(props) {
 
     const fetchMoreData = () => {
         // alert("Fetch more data")
+        props.fetchMoreData();
     }
 
     return (
-        <div className={styles.RunningLogsList}>
+        <div>
             <InfiniteScroll
                 dataLength={props.logsListData?.length}
                 next={fetchMoreData}
-                hasMore={false}
+                hasMore={true}
             >
 
                 <table className={styles.RunningLogsListTable}>
