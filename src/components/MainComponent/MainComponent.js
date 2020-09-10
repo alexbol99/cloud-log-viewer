@@ -10,7 +10,7 @@ function MainComponent(props) {
     const [index, setIndex] = useState(0);
     const [loading, setLoading] = useState(false);
 
-    const numInChunk = 8;
+    const numInChunk = 1000;
     let logsListData = [];
     let chartData = null;
     let runData = null;
@@ -79,7 +79,7 @@ function MainComponent(props) {
         setLoading(true);
 
         let keysList = await fetchKeysList(api_uri);
-        let filteredKeysList = filterNewKeysList(keysList);
+        // let filteredKeysList = filterNewKeysList(keysList);
         let chunkOfKeysList = keysList.slice(0,numInChunk);
         let newDataArray = await fetchDataByKeysList(chunkOfKeysList);
 

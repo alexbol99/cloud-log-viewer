@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="eb5666f8-fa31-4b81-a449-ca177696146b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
+    <list default="true" id="eb5666f8-fa31-4b81-a449-ca177696146b" name="Default Changelist" comment="- change favicon.ico&#10;- show log file content in modal popup">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/MainComponent/MainComponent.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MainComponent/MainComponent.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/RunningLogsList/RunningLogsList.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/RunningLogsList/RunningLogsList.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/RunningLogsList/RunningLogsListHeader/RunningLogsListHeader.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/RunningLogsList/RunningLogsListHeader/RunningLogsListHeader.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/RunningLogsList/RunningLogsListTable/RunningLogsListTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/RunningLogsList/RunningLogsListTable/RunningLogsListTable.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/logParser.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/logFileParser.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -90,13 +86,13 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="npm.start" />
         <item itemvalue="npm.deploy" />
+        <item itemvalue="npm.start" />
         <item itemvalue="npm.build" />
       </list>
     </recent_temporary>
   </component>
-  <component name="SpellCheckerSettings" BundledDictionaries="0" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" Dictionaries="0" CorrectionsLimit="5" DefaultDictionary="application-level" UseSingleDictionary="true" />
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -116,6 +112,8 @@
       <workItem from="1596092099477" duration="119000" />
       <workItem from="1597567969633" duration="8993000" />
       <workItem from="1597652464344" duration="24347000" />
+      <workItem from="1599657101471" duration="599000" />
+      <workItem from="1599745130595" duration="900000" />
     </task>
     <task id="LOCAL-00001" summary="- chart remove fixed height">
       <created>1593938043163</created>
@@ -205,33 +203,33 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="764" y="297" key="FileChooserDialogImpl/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1595515709974" />
-    <state width="1127" height="144" key="GridCell.Tab.0.bottom" timestamp="1599301674360">
-      <screen x="0" y="23" width="1280" height="728" />
+    <state width="1657" height="178" key="GridCell.Tab.0.bottom" timestamp="1599745431752">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1717" height="193" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1594824351482" />
     <state width="1127" height="144" key="GridCell.Tab.0.bottom/0.23.1280.728@0.23.1280.728" timestamp="1599301674360" />
-    <state width="1657" height="175" key="GridCell.Tab.0.bottom/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1597839906921" />
+    <state width="1657" height="178" key="GridCell.Tab.0.bottom/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1599745431752" />
     <state width="1657" height="175" key="GridCell.Tab.0.bottom/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1597839679986" />
-    <state width="1127" height="144" key="GridCell.Tab.0.center" timestamp="1599301674358">
-      <screen x="0" y="23" width="1280" height="728" />
+    <state width="1657" height="178" key="GridCell.Tab.0.center" timestamp="1599745431752">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1717" height="193" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1594824351482" />
     <state width="1127" height="144" key="GridCell.Tab.0.center/0.23.1280.728@0.23.1280.728" timestamp="1599301674358" />
-    <state width="1657" height="175" key="GridCell.Tab.0.center/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1597839906921" />
+    <state width="1657" height="178" key="GridCell.Tab.0.center/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1599745431752" />
     <state width="1657" height="175" key="GridCell.Tab.0.center/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1597839679986" />
-    <state width="1127" height="144" key="GridCell.Tab.0.left" timestamp="1599301674358">
-      <screen x="0" y="23" width="1280" height="728" />
+    <state width="1657" height="178" key="GridCell.Tab.0.left" timestamp="1599745431752">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1717" height="193" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1594824351482" />
     <state width="1127" height="144" key="GridCell.Tab.0.left/0.23.1280.728@0.23.1280.728" timestamp="1599301674358" />
-    <state width="1657" height="175" key="GridCell.Tab.0.left/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1597839906921" />
+    <state width="1657" height="178" key="GridCell.Tab.0.left/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1599745431752" />
     <state width="1657" height="175" key="GridCell.Tab.0.left/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1597839679986" />
-    <state width="1127" height="144" key="GridCell.Tab.0.right" timestamp="1599301674360">
-      <screen x="0" y="23" width="1280" height="728" />
+    <state width="1657" height="178" key="GridCell.Tab.0.right" timestamp="1599745431752">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1717" height="193" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1594824351482" />
     <state width="1127" height="144" key="GridCell.Tab.0.right/0.23.1280.728@0.23.1280.728" timestamp="1599301674360" />
-    <state width="1657" height="175" key="GridCell.Tab.0.right/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1597839906921" />
+    <state width="1657" height="178" key="GridCell.Tab.0.right/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1599745431752" />
     <state width="1657" height="175" key="GridCell.Tab.0.right/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1597839679986" />
     <state x="2503" y="258" key="Vcs.Push.Dialog.v2" timestamp="1597737095803">
       <screen x="1920" y="0" width="1920" height="1040" />
@@ -239,10 +237,10 @@
     <state x="583" y="258" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1593938044684" />
     <state x="583" y="258" key="Vcs.Push.Dialog.v2/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1597591842264" />
     <state x="2503" y="258" key="Vcs.Push.Dialog.v2/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1597737095803" />
-    <state x="772" y="421" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1597567982909">
+    <state x="772" y="421" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1599745146122">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="772" y="421" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1597567982909" />
+    <state x="772" y="421" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1599745146122" />
     <state x="2692" y="421" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1595511276601" />
   </component>
 </project>
