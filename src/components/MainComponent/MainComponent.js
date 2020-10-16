@@ -79,8 +79,8 @@ function MainComponent(props) {
         setLoading(true);
 
         let keysList = await fetchKeysList(api_uri);
-        // let filteredKeysList = filterNewKeysList(keysList);
-        let chunkOfKeysList = keysList.slice(0,numInChunk);
+        let filteredKeysList = filterNewKeysList(keysList);
+        let chunkOfKeysList = filteredKeysList.slice(0,numInChunk);
         let newDataArray = await fetchDataByKeysList(chunkOfKeysList);
 
         let localDataArray = logDataArray.concat(newDataArray);

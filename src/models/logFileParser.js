@@ -3,8 +3,8 @@ export function parse(text) {
     const arrayOfTimestamps = timestamps(row_lines);
     const errorTimeString = errorTime(row_lines, arrayOfTimestamps);
     return {
-        runningDate: runningDate(row_lines),
-        runningTime: runningTime(row_lines, errorTimeString),
+        runningDate: runningDate(arrayOfTimestamps),
+        runningTime: runningTime(arrayOfTimestamps, errorTimeString),
         jobName: jobName(row_lines),
         batch: batch(arrayOfTimestamps),
         uploadTime: uploadTime(arrayOfTimestamps),
@@ -22,99 +22,54 @@ function jobName(row_lines) {
     return job_name;
 }
 
-function runningDate(row_lines) {
-    let arrayOfLines = row_lines.filter(line => line.match("time"));
-    let splitArray = arrayOfLines[0].split(' ');
-    let [day, month, year] = splitArray[1].split(':')[1].split('/');
-    if (day.length > 2) day = day.substr(1);
-    let [hour, min] = splitArray[2].split(':');
-    if (hour.trim().length > 2) hour = hour.substr(1);
-    if (min.trim().length > 2) min = min.substr(1);
-    return new Date(Date.UTC(year, month - 1, day, hour, min)).toUTCString();
+function runningDate(arrayOfTimestamps) {
+    let job_started = arrayOfTimestamps.filter(
+        line => line.message === "Ready for commands"
+    )[0];
+    return job_started.utcDate.toLocaleString();
 }
 
-function runningTime(row_lines, errorTime) {
-    let job_started_line = row_lines
-        .filter(line => line.match("Ready for commands"))[0];
-    let start_time = JSON.parse(job_started_line).time;
-    let job_ended_line = row_lines
-        .filter(line => line.match("Job is ready"));
-    let end_time = job_ended_line.length > 0 ? JSON.parse(job_ended_line).time : errorTime;
-
-    return end_time ? secToHHMMSS(
-        time_diff(start_time, end_time)) : "";
-}
-
-// export function getChartData(data) {
-//     let stats = data.batch.map(action => {
-//         let timestamp = data.acpTime.find(
-//             a => a.Stage === action.Stage && a.Index === action.StageIndex
-//         );
-//         return {
-//             Object: "Acp",
-//             ActNum: action.ActNum,
-//             Name: action.AnalysisName,
-//             Layer: action.LayerName,
-//             Stage: action.Stage,
-//             Index: action.StageIndex,
-//             StartTime: timestamp ? timestamp.StartTime : "",
-//             CompleteTime: timestamp ? timestamp.CompleteTime : "",
-//             Time: time_diff(timestamp.StartTime, timestamp.CompleteTime),
-//             StartDate: new Date(`01/01/1970 ${timestamp.StartTime}`),
-//             EndDate: new Date(`01/01/1970 ${timestamp.CompleteTime}`)
-//         };
-//     });
-
-//     let splitterObj = {
-//         Object: "Splitter",
-//         Name: "Splitter",
-//         Index: 0,
-//         StartDate: new Date(`01/01/1970 ${data.splitterTime.StartTime}`),
-//         EndDate: new Date(`01/01/1970 ${data.splitterTime.CompleteTime}`)
-//     };
-
-//     let mergerObj = {
-//         Object: "Merger",
-//         Name: "Merger",
-//         Index: stats.length + 1,
-//         StartDate: new Date(`01/01/1970 ${data.mergerTime.StartTime}`),
-//         EndDate: new Date(`01/01/1970 ${data.mergerTime.CompleteTime}`)
-//     };
-
-//     let uploadObj = {
-//         Object: "Upload",
-//         Name: "Upload",
-//         Index: -1,
-//         StartDate: new Date(`01/01/1970 ${data.uploadTime.StartTime}`),
-//         EndDate: new Date(`01/01/1970 ${data.uploadTime.CompleteTime}`)
-//     };
-
-//     let downloadObj = {
-//         Object: "Download",
-//         Name: "Download",
-//         Index: stats.length + 2,
-//         StartDate: new Date(`01/01/1970 ${data.downloadTime.StartTime}`),
-//         EndDate: new Date(`01/01/1970 ${data.downloadTime.CompleteTime}`)
-//     };
-
-//     // stats = [uploadObj, splitterObj, ...stats, mergerObj, downloadTime];
-//     stats = [uploadObj, splitterObj, ...stats, mergerObj, downloadObj];
-//     return stats;
+// function runningDate(row_lines) {
+//     let arrayOfLines = row_lines.filter(line => line.match("time"));
+//     let splitArray = arrayOfLines[0].split(' ');
+//     let [day, month, year] = splitArray[1].split(':')[1].split('/');
+//     if (day.length > 2) day = day.substr(1);
+//     let [hour, min] = splitArray[2].split(':');
+//     if (hour.trim().length > 2) hour = hour.substr(1);
+//     if (min.trim().length > 2) min = min.substr(1);
+//     return new Date(Date.UTC(year, month - 1, day, hour, min)).toUTCString();
 // }
 
+function runningTime(arrayOfTimestamps, errorTime) {
+    let job_started = arrayOfTimestamps.filter(
+        line => line.message === "Ready for commands"
+    )[0];
+    let start_time = job_started.utcDate;
+    let job_ended_arr = arrayOfTimestamps.filter(
+        line => line.message === "Job is ready"
+    );
+    let end_time = job_ended_arr.length > 0 ? job_ended_arr[0].utcDate : errorTime;
+
+    return end_time ? time_diff(start_time, end_time) : "";
+}
+
 function batch(arrayOfTimestamps) {
-    let batchObject = arrayOfTimestamps.filter(d => d.type === "Batch")[0];
-    return JSON.parse(batchObject.message);
+    let batchObjectList = arrayOfTimestamps.filter(d => d.type === "Batch");
+    let messageList = batchObjectList.map(batchObject =>
+        batchObject.message.slice(2)
+    );
+    let message = messageList.join("");
+    return JSON.parse(message);
 }
 
 function uploadTime(arrayOfTimestamps) {
     let uploadTime = {
         StartTime: arrayOfTimestamps.find(
             d => d.object === "WebClient" && d.message === "Job was registered"
-        ).time,
+        ).utcDate,
         CompleteTime: arrayOfTimestamps.find(
             d => d.object === "WebClient" && d.message === "After send"
-        ).time
+        ).utcDate
     };
     return uploadTime;
 }
@@ -122,24 +77,20 @@ function uploadTime(arrayOfTimestamps) {
 function splitterTime(arrayOfTimestamps) {
     let splitter = arrayOfTimestamps.filter(d => d.object === "Splitter")
     let s = {
-        StartTime: toLocal(
-            splitter.find(s => s.message === "Splitter started").time
-        ),
-        CompleteTime: toLocal(splitter.find(s => s.message === "End of Split").time)
+        StartTime: splitter.find(s => s.message === "Splitter started").utcDate,
+        CompleteTime: splitter.find(s => s.message === "End of Split").utcDate
     };
     return s;
 }
 
 function mergerTime(arrayOfTimestamps) {
     let merger = arrayOfTimestamps.filter(d => d.object === "Merger");
-    // if (!merger) return null
-
     let mergerStartMessage = merger.find(s => s.message === "Preparing job for merge");
     let mergerCompleteMessage = merger.find(s => s.message === "Moving Job to S3");
 
     let s = {
-        StartTime: mergerStartMessage ? toLocal(mergerStartMessage.time) : null,
-        CompleteTime: mergerCompleteMessage ? toLocal(mergerCompleteMessage.time) : null
+        StartTime: mergerStartMessage ? mergerStartMessage.utcDate : null,
+        CompleteTime: mergerCompleteMessage ? mergerCompleteMessage.utcDate : null
     };
     return s;
 }
@@ -148,8 +99,8 @@ function downloadTime(arrayOfTimestamps) {
     let downloadStartMessage = arrayOfTimestamps.find(d => d.object === "WebClient" && d.message === "Download Data");
     let downloadCompleteMessage = arrayOfTimestamps.find(d => d.object === "WebClient" && d.message === "Job is ready");
     let downloadTime = {
-        StartTime: downloadStartMessage ? downloadStartMessage.time : null,
-        CompleteTime: downloadCompleteMessage ? downloadCompleteMessage.time : null
+        StartTime: downloadStartMessage ? downloadStartMessage.utcDate : null,
+        CompleteTime: downloadCompleteMessage ? downloadCompleteMessage.utcDate : null
     };
     return downloadTime;
 }
@@ -159,9 +110,8 @@ function acpTime(row_lines, arrayOfTimestamps) {
     let acp = arrayOfTimestamps.filter(d => (d.type === "Progress" || d.type === "Info") && d.object === "ACP");
     let acp_transformed = acp.map(action => {
         let message = action.message.split(' ');
-        let localTime = toLocal(action.time);
         return {
-            Time: localTime,
+            Time: action.utcDate,
             Step: message[0],
             Stage: message[1].split(':')[1],
             Index: Number(message[2].split(':')[1]) + 1
@@ -208,7 +158,7 @@ function errorTime(row_lines, arrayOfTimestamps) {
 
     let errorTime = null;
     if (errorMessage) {
-        errorTime = errorMessage.time
+        errorTime = errorMessage.utcDate
     }
     // else {
     //     let ping_lines = row_lines
@@ -222,25 +172,33 @@ function timestamps(row_lines) {
     let arrayOfLines = row_lines.filter(line => line.match("time"));
     let tmpArrayOfLines = [...arrayOfLines];
     tmpArrayOfLines.splice(0, 1);
-    return tmpArrayOfLines.map(line => JSON.parse(line));
+    let arrayOfTimestamps = [];
+    let timeStamp;
+    let utcDate;
+    for (let i = 0; i < tmpArrayOfLines.length; i++) {
+        try {
+            timeStamp = JSON.parse(tmpArrayOfLines[i]);
+            if (timeStamp.message === "Submit Splitter") continue; // bad format
+            utcDate = timeStampToDate(timeStamp.time);
+            arrayOfTimestamps.push({ utcDate, ...timeStamp });
+        } catch (e) {
+            return [i, tmpArrayOfLines[i]];
+        }
+    }
+    return arrayOfTimestamps;
 }
 
 function time_diff(start_time, complete_time) {
-    let start = start_time.split(':').map(t => Number(t));
-    let start_sec = start[0] * 3600 + start[1] * 60 + start[2];
-    let complete = complete_time.split(':').map(t => Number(t));
-    let complete_sec = complete[0] * 3600 + complete[1] * 60 + complete[2];
-    let diff_sec = complete_sec - start_sec;
-    return diff_sec;
+    return msecToHHMMSS(complete_time - start_time);
 }
 
-function secToHHMMSS(time) {
-    return new Date(time * 1000).toISOString().substr(11, 8);
+function msecToHHMMSS(time) {
+    return new Date(time).toISOString().substr(11, 8);
 }
 
-function toLocal(hhmmss) {
-    if (!hhmmss) return null;
-    let [HH, MM, SS] = hhmmss.split(':');
-    let local = [Number(HH) + 3, MM, SS].join(':');
-    return local;
+function timeStampToDate(timeStr) {
+    let splitArray = timeStr.split(', ');
+    let [month, day, year] = splitArray[0].split('/');
+    let [hour, min, sec] = splitArray[1].split(':');
+    return new Date(Date.UTC(year, month - 1, day, hour, min, sec)); // .toUTCString();
 }

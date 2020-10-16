@@ -13,11 +13,11 @@ export function getChartData(data) {
             ActParam: action.ActParam,
             BeginNf: action.BeginNf,
             EndNf: action.EndNf,
-            StartTime: timestamp ? timestamp.StartTime : "",
-            CompleteTime: timestamp ? timestamp.CompleteTime : "",
-            Time: time_diff(timestamp.StartTime, timestamp.CompleteTime),
-            StartDate: new Date(`01/01/1970 ${timestamp.StartTime}`),
-            EndDate: new Date(`01/01/1970 ${timestamp.CompleteTime}`)
+            ContourGroupId: action.ContourGroupId,
+            ContourGroupNum: action.ContourGroupNum,
+            StartDate: timestamp ? timestamp.StartTime : "",
+            EndDate: timestamp ? timestamp.CompleteTime : "",
+            Time: time_diff(timestamp.StartTime, timestamp.CompleteTime)
         };
     });
 
@@ -25,16 +25,16 @@ export function getChartData(data) {
         Object: "Upload",
         Name: "Upload",
         Index: -1,
-        StartDate: new Date(`01/01/1970 ${data.uploadTime.StartTime}`),
-        EndDate: new Date(`01/01/1970 ${data.uploadTime.CompleteTime}`)
+        StartDate: data.uploadTime.StartTime,
+        EndDate: data.uploadTime.CompleteTime
     };
 
     let splitterObj = {
         Object: "Splitter",
         Name: "Splitter",
         Index: 0,
-        StartDate: new Date(`01/01/1970 ${data.splitterTime.StartTime}`),
-        EndDate: new Date(`01/01/1970 ${data.splitterTime.CompleteTime}`)
+        StartDate: data.splitterTime.StartTime,
+        EndDate: data.splitterTime.CompleteTime
     };
 
     let mergerObj;
@@ -43,8 +43,8 @@ export function getChartData(data) {
             Object: "Merger",
             Name: "Merger",
             Index: stats.length + 1,
-            StartDate: new Date(`01/01/1970 ${data.mergerTime.StartTime}`),
-            EndDate: new Date(`01/01/1970 ${data.mergerTime.CompleteTime}`)
+            StartDate: data.mergerTime.StartTime,
+            EndDate: data.mergerTime.CompleteTime
         };
     }
 
@@ -54,8 +54,8 @@ export function getChartData(data) {
             Object: "Download",
             Name: "Download",
             Index: stats.length + 2,
-            StartDate: new Date(`01/01/1970 ${data.downloadTime.StartTime}`),
-            EndDate: new Date(`01/01/1970 ${data.downloadTime.CompleteTime}`)
+            StartDate: data.downloadTime.StartTime,
+            EndDate: data.downloadTime.CompleteTime
         };
     }
 
@@ -85,11 +85,19 @@ export function getListData(localData) {
     }
 }
 
+// function time_diff(start_time, complete_time) {
+//     let start = start_time.split(':').map(t => Number(t));
+//     let start_sec = start[0] * 3600 + start[1] * 60 + start[2];
+//     let complete = complete_time.split(':').map(t => Number(t));
+//     let complete_sec = complete[0] * 3600 + complete[1] * 60 + complete[2];
+//     let diff_sec = complete_sec - start_sec;
+//     return diff_sec;
+// }
+
 function time_diff(start_time, complete_time) {
-    let start = start_time.split(':').map(t => Number(t));
-    let start_sec = start[0] * 3600 + start[1] * 60 + start[2];
-    let complete = complete_time.split(':').map(t => Number(t));
-    let complete_sec = complete[0] * 3600 + complete[1] * 60 + complete[2];
-    let diff_sec = complete_sec - start_sec;
-    return diff_sec;
+    return msecToHHMMSS(complete_time - start_time);
+}
+
+function msecToHHMMSS(time) {
+    return new Date(time).toISOString().substr(11, 8);
 }
