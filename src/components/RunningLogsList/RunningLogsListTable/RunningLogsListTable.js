@@ -55,8 +55,8 @@ function RunningLogsListTable(props) {
                         <th style={{width:"5%"}}># Actions</th>
                         <th style={{width:"5%"}}># Layers</th>
                         <th style={{width:"5%"}}># ACPs</th>
-                        <th style={{width:"7%"}}>Running Time</th>
-                        <th style={{width:"10%"}}>S3 bucket key (filename)</th>
+                        <th style={{width:"4%"}}>Running Time</th>
+                        <th style={{width:"13%"}}>S3 bucket key (filename)</th>
                     </tr>
                     </thead>
                     <tbody>

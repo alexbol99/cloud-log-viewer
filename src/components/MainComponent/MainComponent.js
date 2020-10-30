@@ -15,7 +15,8 @@ function MainComponent(props) {
     let chartData = null;
     let runData = null;
     let awsRegion = "eu-central-1";
-    let api_uri = "https://bah2tkltg6.execute-api.eu-central-1.amazonaws.com/test/list";
+    // let api_uri = "https://bah2tkltg6.execute-api.eu-central-1.amazonaws.com/test/list";
+    let api_uri = "https://vm7sirnd04.execute-api.us-east-1.amazonaws.com/test/list";
 
     // Fetch keys list (filenames) from s3 bucket using given api
     const fetchKeysList = async() => {

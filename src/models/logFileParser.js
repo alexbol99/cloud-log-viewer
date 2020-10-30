@@ -175,11 +175,13 @@ function timestamps(row_lines) {
     let arrayOfTimestamps = [];
     let timeStamp;
     let utcDate;
+    let dateStr = "";
     for (let i = 0; i < tmpArrayOfLines.length; i++) {
         try {
             timeStamp = JSON.parse(tmpArrayOfLines[i]);
             if (timeStamp.message === "Submit Splitter") continue; // bad format
-            utcDate = timeStampToDate(timeStamp.time);
+            utcDate = timeStampToDate(timeStamp.time, dateStr);
+            dateStr = utcDate.toDateString();
             arrayOfTimestamps.push({ utcDate, ...timeStamp });
         } catch (e) {
             return [i, tmpArrayOfLines[i]];
@@ -196,9 +198,14 @@ function msecToHHMMSS(time) {
     return new Date(time).toISOString().substr(11, 8);
 }
 
-function timeStampToDate(timeStr) {
+function timeStampToDate(timeStr, dateStr) {
     let splitArray = timeStr.split(', ');
-    let [month, day, year] = splitArray[0].split('/');
-    let [hour, min, sec] = splitArray[1].split(':');
-    return new Date(Date.UTC(year, month - 1, day, hour, min, sec)); // .toUTCString();
+    if (splitArray.length === 1) {   // bad format only time no date
+        return new Date(dateStr + ' ' + timeStr)
+    }
+    else {
+        let [month, day, year] = splitArray[0].split('/');
+        let [hour, min, sec] = splitArray[1].split(':');
+        return new Date(Date.UTC(year, month - 1, day, hour, min, sec)); // .toUTCString();
+    }
 }
