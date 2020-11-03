@@ -42,7 +42,7 @@ function RunningLogsListTable(props) {
             <InfiniteScroll
                 dataLength={props.logsListData?.length}
                 next={fetchMoreData}
-                hasMore={false}
+                hasMore={true}
             >
 
                 <table className={styles.RunningLogsListTable}>

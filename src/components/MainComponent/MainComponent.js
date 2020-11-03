@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import styles from './MainComponent.module.css';
 import RunningLogsList from "../RunningLogsList/RunningLogsList";
 import VegaLiteChart from "../VegaLiteChart/VegaLiteChart";
+import FileUploadButton from "../FileUploadButton/FileUploadButton";
 import {getChartData, getListData} from "../../models/logData";
 import {parse} from "../../models/logFileParser";
 
@@ -10,7 +11,7 @@ function MainComponent(props) {
     const [index, setIndex] = useState(0);
     const [loading, setLoading] = useState(false);
 
-    const numInChunk = 1000;
+    const numInChunk = 8;
     let logsListData = [];
     let chartData = null;
     let runData = null;
@@ -90,6 +91,8 @@ function MainComponent(props) {
             return new Date(b.runningDate) - new Date(a.runningDate);
         });
 
+        console.log(`data array length: ${localDataArray.length}`);
+
         // If all data loaded, render list and select first row
         if (localDataArray.length > 0) {
             setLoading(false);
@@ -138,6 +141,7 @@ function MainComponent(props) {
 
     return (
         <main className={styles.MainComponent}>
+            <FileUploadButton />
             <RunningLogsList
                 awsRegion = {awsRegion}
                 logsListData={logsListData}
