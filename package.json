@@ -29,7 +29,7 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
-  "homepage": "https://alexbol99.github.io/dfms-running-chart/",
+  "homepage": "https://alexbol99.github.io/cloud-log-viewer/",
   "eslintConfig": {
     "extends": "react-app"
   },

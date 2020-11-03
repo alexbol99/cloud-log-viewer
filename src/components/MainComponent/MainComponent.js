@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import styles from './MainComponent.module.css';
 import RunningLogsList from "../RunningLogsList/RunningLogsList";
 import VegaLiteChart from "../VegaLiteChart/VegaLiteChart";
-import FileUploadButton from "../FileUploadButton/FileUploadButton";
 import {getChartData, getListData} from "../../models/logData";
 import {parse} from "../../models/logFileParser";
 
@@ -39,48 +38,10 @@ function MainComponent(props) {
         return dataArray;
     }
 
-    // const fetchAllData = async () => {
-    //     setLoading(true);
-    //
-    //     let keysList = await fetchKeysList(api_uri);
-    //     let localDataArray = await fetchDataByKeysList(keysList);
-    //
-    //     localDataArray.sort(function(a,b){
-    //         return new Date(b.runningDate) - new Date(a.runningDate);
-    //     });
-    //
-    //     // If all data loaded, render list and select first row
-    //     if (localDataArray.length > 0) {
-    //         setLoading(false);
-    //         setLogDataArray(localDataArray);             // trigger rendering
-    //     }
-    // };
-
-    // const fetchNewData = async () => {
-    //     setLoading(true);
-    //
-    //     let keysList = await fetchKeysList(api_uri);
-    //     let filteredKeysList = filterNewKeysList(keysList);
-    //
-    //     let newDataArray = await fetchDataByKeysList(filteredKeysList);
-    //
-    //     let localDataArray = logDataArray.concat(newDataArray);
-    //
-    //     localDataArray.sort(function(a,b){
-    //         return new Date(b.runningDate) - new Date(a.runningDate);
-    //     });
-    //
-    //     // If all data loaded, render list and select first row
-    //     if (localDataArray.length > 0) {
-    //         setLoading(false);
-    //         setLogDataArray(localDataArray);             // trigger rendering
-    //     }
-    // }
-
-    const fetchMoreData = async () => {
+    const fetchMoreData = async (keysListToFetch) => {
         setLoading(true);
 
-        let keysList = await fetchKeysList(api_uri);
+        let keysList = keysListToFetch || await fetchKeysList(api_uri);
         let filteredKeysList = filterNewKeysList(keysList);
         let chunkOfKeysList = filteredKeysList.slice(0,numInChunk);
         let newDataArray = await fetchDataByKeysList(chunkOfKeysList);
@@ -112,6 +73,10 @@ function MainComponent(props) {
         // setLoading(true)
     }
 
+    const fetchUploaded = (keysList) => {
+        fetchMoreData(keysList)
+    }
+
     // Effect to load all data from AWS s3 bucket after component mounted
     useEffect( () => {
         if (logDataArray.length === 0) {
@@ -141,7 +106,6 @@ function MainComponent(props) {
 
     return (
         <main className={styles.MainComponent}>
-            <FileUploadButton />
             <RunningLogsList
                 awsRegion = {awsRegion}
                 logsListData={logsListData}
@@ -149,6 +113,7 @@ function MainComponent(props) {
                 loading={loading}
                 logItemClicked={logItemClicked}
                 onRefreshButtonPressed={syncData}
+                onUploadSucceed={fetchUploaded}
             />
             <VegaLiteChart data={chartData} runData={runData} />
         </main>

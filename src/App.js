@@ -6,7 +6,7 @@ function App() {
     return (
         <div className="App">
             <div className="content">
-                <h1>DFM Cloud Monitor</h1>
+                <h1>Cloud Log Viewer</h1>
                 <hr />
                 <MainComponent />
                 <hr />

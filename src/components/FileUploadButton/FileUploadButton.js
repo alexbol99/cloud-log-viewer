@@ -1,5 +1,6 @@
 import React from "react";
 import Files from "react-butterfiles";
+import styles from "./FileUploadButton.module.css";
 
 async function getPresignedURL(selectedFile) {
     const url = "https://vm7sirnd04.execute-api.us-east-1.amazonaws.com/test/get-presigned-url/" +
@@ -42,8 +43,9 @@ async function uploadFileToS3(presignedURL, file) {
  * @returns {*}
  * @constructor
  */
-const FileUploadButton = () => (
+const FileUploadButton = (props) => (
     <Files
+        className={styles.FileUploadButton}
         onSuccess={async ([selectedFile]) => {
             // Step 1 - get pre-signed POST data.
             const presignedURL = await getPresignedURL(selectedFile);
@@ -52,12 +54,17 @@ const FileUploadButton = () => (
                 const { file } = selectedFile.src;
                 const resp = await uploadFileToS3(presignedURL, file);
                 console.log("File was successfully uploaded! " + resp);
+                props.onUploadSucceed([selectedFile.name]);
             } catch (e) {
                 console.log("An error occurred!", e.message);
             }
         }}
     >
-        {({ browseFiles }) => <button onClick={browseFiles}>Select file...</button>}
+        {({ browseFiles }) =>
+            <button
+                className={styles.FileUploadButtonButton}
+                onClick={browseFiles}>Upload
+            </button>}
     </Files>
 );
 
