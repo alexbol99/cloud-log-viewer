@@ -32,3 +32,8 @@
 .RunningLogListItemNumeric {
     text-align: center;
 }
+
+.RunningLogListItemCheckMark {
+    text-align: center;
+    font-size: larger;
+}

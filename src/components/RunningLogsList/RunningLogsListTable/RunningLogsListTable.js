@@ -48,15 +48,16 @@ function RunningLogsListTable(props) {
                 <table className={styles.RunningLogsListTable}>
                     <thead>
                     <tr>
+                        <th style={{width: "5%"}}>[]</th>
                         <th style={{width:"15%"}}>Running date</th>
-                        <th style={{width:"25%"}}>Job Name</th>
+                        <th style={{width:"20%"}}>Job Name</th>
                         <th style={{width:"3%"}}>Step</th>
                         <th style={{width:"15%"}}>Checklist</th>
                         <th style={{width:"5%"}}># Actions</th>
                         <th style={{width:"5%"}}># Layers</th>
                         <th style={{width:"5%"}}># ACPs</th>
                         <th style={{width:"4%"}}>Running Time</th>
-                        <th style={{width:"13%"}}>S3 bucket key (filename)</th>
+                        <th style={{width:"13%"}}>Log File Name</th>
                     </tr>
                     </thead>
                     <tbody>

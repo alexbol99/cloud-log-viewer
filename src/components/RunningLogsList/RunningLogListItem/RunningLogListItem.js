@@ -41,6 +41,11 @@ function RunningLogsListItem(props) {
         <React.Fragment>
             <tr className={style} onClick={props.itemClicked} ref={refElement}>
                 <td>
+                    <h4 className={styles.RunningLogListItemCheckMark}>
+                        ✓
+                    </h4>
+                </td>
+                <td>
                     {props.data.runningDate}
                 </td>
                 <td>

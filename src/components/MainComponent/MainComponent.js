@@ -16,11 +16,11 @@ function MainComponent(props) {
     let runData = null;
     let awsRegion = "eu-central-1";
     // let api_uri = "https://bah2tkltg6.execute-api.eu-central-1.amazonaws.com/test/list";
-    let api_uri = "https://vm7sirnd04.execute-api.us-east-1.amazonaws.com/test/list";
+    let api_uri = "https://vm7sirnd04.execute-api.us-east-1.amazonaws.com/test";
 
     // Fetch keys list (filenames) from s3 bucket using given api
     const fetchKeysList = async() => {
-        let response = await fetch(api_uri);
+        let response = await fetch(`${api_uri}/list`);
         let json = await response.json();
         let keysList = JSON.parse(json.body).keys;
         return keysList;
@@ -28,7 +28,7 @@ function MainComponent(props) {
 
     // Fetch content of files from s3 bucket by given list of keys
     const fetchDataByKeysList = async (keysList) => {
-        let promises = keysList.map (key => fetch(`${api_uri}/${key}`))
+        let promises = keysList.map (key => fetch(`${api_uri}/list/${key}`))
         let respArray = await Promise.all(promises)
         let json_promises = respArray.map(resp => resp.json())
         let textArray = await Promise.all(json_promises);
@@ -89,6 +89,34 @@ function MainComponent(props) {
         setIndex(index);                                     // trigger rendering
     }
 
+    const deleteFile = async () => {
+        if (!index) return
+        let logFileData = logDataArray[index];
+        let key = logFileData.key;
+        alert(`file ${logFileData.key} will be deleted`)
+        // alert(`file ${index} will be deleted`)
+        const url = `${api_uri}/delete`;
+        try {
+            let response = await fetch(url,{
+                method:"DELETE",
+                headers: {
+                    'Content-Type': 'application/json'
+                    // 'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: JSON.stringify( {keys: [key]})
+            });
+            let json = await response.json();
+            console.log(json.keys);
+            const deletedKeys = json.keys;
+            // fetchMoreData();
+            let newLogDataArray = logDataArray.filter( data => !deletedKeys.includes(data.key));
+            setLogDataArray(newLogDataArray);             // trigger rendering
+        }
+        catch (e) {
+            alert("error delete files")
+        }
+    }
+
     // Setup data before rendering
     if (logDataArray.length > 0) {
         logsListData = logDataArray.map(data => getListData(data))
@@ -112,8 +140,9 @@ function MainComponent(props) {
                 selectedIndex={index}
                 loading={loading}
                 logItemClicked={logItemClicked}
-                onRefreshButtonPressed={syncData}
                 onUploadSucceed={fetchUploaded}
+                onDeleteButtonPressed={deleteFile}
+                onRefreshButtonPressed={syncData}
             />
             <VegaLiteChart data={chartData} runData={runData} />
         </main>

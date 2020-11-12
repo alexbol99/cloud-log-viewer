@@ -5,7 +5,10 @@ import classes from "./Button.module.css";
 const button = (props) => {
     return (
         <button title={props.title} onClick={props.onClick} className={classes.Button}>
-            <FontAwesomeIcon icon={props.icon} size="2x" spin={props.spin}  />
+            {props.icon ?
+            <FontAwesomeIcon icon={props.icon} size="2x" spin={props.spin}  /> :
+                null}
+            {props.text}
         </button>
     );
 };

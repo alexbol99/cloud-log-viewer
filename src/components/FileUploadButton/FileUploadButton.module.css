@@ -4,12 +4,12 @@
 
 .FileUploadButtonButton {
     color: #303232;
-    font-size: larger;
-    /*font-weight: bolder;*/
+    /*font-size: larger;*/
+    font-weight: bolder;
     font-family: inherit;
     background-color: lightgrey;
     border-radius: 6px;
-    padding: 8px;
+    padding: 5px 8px;
     margin-left: 1em;
     margin-bottom: 0.4em;
 }

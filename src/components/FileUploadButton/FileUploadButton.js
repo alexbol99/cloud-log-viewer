@@ -1,5 +1,6 @@
 import React from "react";
 import Files from "react-butterfiles";
+// import readFiles from "../../models/readFile";
 import styles from "./FileUploadButton.module.css";
 
 async function getPresignedURL(selectedFile) {
@@ -45,8 +46,21 @@ async function uploadFileToS3(presignedURL, file) {
  */
 const FileUploadButton = (props) => (
     <Files
-        className={styles.FileUploadButton}
         onSuccess={async ([selectedFile]) => {
+            // Step 1 - validate that files ok
+            if (!(File && FileReader && FileList)) return;
+            // let files = event.target.files; // FileList object
+
+            let reader = new FileReader();
+            let string = ""
+            reader.onload = (event) => {
+                string = event.target.result;
+                console.log(string);
+            }
+            reader.readAsText(selectedFile.src.file);
+
+            // readFiles([selectedFile]);
+
             // Step 1 - get pre-signed POST data.
             const presignedURL = await getPresignedURL(selectedFile);
             // Step 2 - upload the file to S3.
