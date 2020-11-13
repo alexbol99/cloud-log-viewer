@@ -18,6 +18,13 @@ function RunningLogsListHeader(props) {
                 onClick={props.onDeleteButtonPressed}
             />
             <Button
+                title="Compare two logs"
+                text="Compare"
+                // icon={faSyncAlt}
+                // spin={props.loading}
+                // onClick={props.onDeleteButtonPressed}
+            />
+            <Button
                 title="Reload logs from S3 bucket"
                 icon={faSyncAlt}
                 spin={props.loading}

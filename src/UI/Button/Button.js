@@ -6,7 +6,7 @@ const button = (props) => {
     return (
         <button title={props.title} onClick={props.onClick} className={classes.Button}>
             {props.icon ?
-            <FontAwesomeIcon icon={props.icon} size="2x" spin={props.spin}  /> :
+            <FontAwesomeIcon icon={props.icon} size="x" spin={props.spin}  /> :
                 null}
             {props.text}
         </button>

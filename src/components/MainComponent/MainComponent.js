@@ -4,6 +4,7 @@ import RunningLogsList from "../RunningLogsList/RunningLogsList";
 import VegaLiteChart from "../VegaLiteChart/VegaLiteChart";
 import {getChartData, getListData} from "../../models/logData";
 import {parse} from "../../models/logFileParser";
+import {fetchFileContentByKeysList, fetchKeysList, deleteFilesFromS3} from "../../models/aws_api";
 
 function MainComponent(props) {
     const [logDataArray, setLogDataArray] = useState([]);
@@ -14,24 +15,10 @@ function MainComponent(props) {
     let logsListData = [];
     let chartData = null;
     let runData = null;
-    let awsRegion = "eu-central-1";
-    // let api_uri = "https://bah2tkltg6.execute-api.eu-central-1.amazonaws.com/test/list";
-    let api_uri = "https://vm7sirnd04.execute-api.us-east-1.amazonaws.com/test";
-
-    // Fetch keys list (filenames) from s3 bucket using given api
-    const fetchKeysList = async() => {
-        let response = await fetch(`${api_uri}/list`);
-        let json = await response.json();
-        let keysList = JSON.parse(json.body).keys;
-        return keysList;
-    }
 
     // Fetch content of files from s3 bucket by given list of keys
     const fetchDataByKeysList = async (keysList) => {
-        let promises = keysList.map (key => fetch(`${api_uri}/list/${key}`))
-        let respArray = await Promise.all(promises)
-        let json_promises = respArray.map(resp => resp.json())
-        let textArray = await Promise.all(json_promises);
+        let textArray = await fetchFileContentByKeysList(keysList);
         let dataArray = textArray.map( e => parse(e.text));
         dataArray.forEach( (data,i) => data.key = keysList[i] )
         dataArray.forEach( (data,i) => data.text = textArray[i].text )
@@ -41,18 +28,16 @@ function MainComponent(props) {
     const fetchMoreData = async (keysListToFetch) => {
         setLoading(true);
 
-        let keysList = keysListToFetch || await fetchKeysList(api_uri);
+        let keysList = keysListToFetch || await fetchKeysList();
         let filteredKeysList = filterNewKeysList(keysList);
+
         let chunkOfKeysList = filteredKeysList.slice(0,numInChunk);
         let newDataArray = await fetchDataByKeysList(chunkOfKeysList);
-
         let localDataArray = logDataArray.concat(newDataArray);
 
         localDataArray.sort(function(a,b){
             return new Date(b.runningDate) - new Date(a.runningDate);
         });
-
-        console.log(`data array length: ${localDataArray.length}`);
 
         // If all data loaded, render list and select first row
         if (localDataArray.length > 0) {
@@ -77,13 +62,6 @@ function MainComponent(props) {
         fetchMoreData(keysList)
     }
 
-    // Effect to load all data from AWS s3 bucket after component mounted
-    useEffect( () => {
-        if (logDataArray.length === 0) {
-            fetchMoreData();
-        }
-    });
-
     // Callback to set new chart data and update selected index
     const logItemClicked = (index) => {
         setIndex(index);                                     // trigger rendering
@@ -94,28 +72,18 @@ function MainComponent(props) {
         let logFileData = logDataArray[index];
         let key = logFileData.key;
         alert(`file ${logFileData.key} will be deleted`)
-        // alert(`file ${index} will be deleted`)
-        const url = `${api_uri}/delete`;
-        try {
-            let response = await fetch(url,{
-                method:"DELETE",
-                headers: {
-                    'Content-Type': 'application/json'
-                    // 'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: JSON.stringify( {keys: [key]})
-            });
-            let json = await response.json();
-            console.log(json.keys);
-            const deletedKeys = json.keys;
-            // fetchMoreData();
-            let newLogDataArray = logDataArray.filter( data => !deletedKeys.includes(data.key));
-            setLogDataArray(newLogDataArray);             // trigger rendering
-        }
-        catch (e) {
-            alert("error delete files")
-        }
+
+        let deletedKeys = await deleteFilesFromS3([key]);
+        let newLogDataArray = logDataArray.filter( data => !deletedKeys.includes(data.key));
+        setLogDataArray(newLogDataArray);             // trigger rendering
     }
+
+    // Effect to load all data from AWS s3 bucket after component mounted
+    useEffect( () => {
+        if (logDataArray.length === 0) {
+            fetchMoreData();
+        }
+    });
 
     // Setup data before rendering
     if (logDataArray.length > 0) {
@@ -135,7 +103,6 @@ function MainComponent(props) {
     return (
         <main className={styles.MainComponent}>
             <RunningLogsList
-                awsRegion = {awsRegion}
                 logsListData={logsListData}
                 selectedIndex={index}
                 loading={loading}

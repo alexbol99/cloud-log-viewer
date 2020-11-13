@@ -7,7 +7,6 @@ function RunningLogsList(props) {
     return (
         <div className={styles.RunningLogsList}>
             <RunningLogsListHeader
-                awsRegion = {props.awsRegion}
                 loading={props.loading}
                 onUploadSucceed={props.onUploadSucceed}
                 onDeleteButtonPressed={props.onDeleteButtonPressed}

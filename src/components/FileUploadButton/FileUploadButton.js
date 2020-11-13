@@ -1,42 +1,9 @@
 import React from "react";
 import Files from "react-butterfiles";
 // import readFiles from "../../models/readFile";
-import styles from "./FileUploadButton.module.css";
-
-async function getPresignedURL(selectedFile) {
-    const url = "https://vm7sirnd04.execute-api.us-east-1.amazonaws.com/test/get-presigned-url/" +
-    selectedFile.name;
-
-    let presignedURL = null;
-    try {
-        let response = await fetch(url);
-        let json = await response.json();
-        presignedURL = json.url;
-    }
-    catch (err) {
-        console.log(err.message)
-    }
-    return presignedURL;
-};
-
-async function uploadFileToS3(presignedURL, file) {
-    let json = null;
-    try {
-        let response = await fetch(presignedURL, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: file
-        });
-        json = await response.json();
-    }
-    catch (err) {
-        console.log(err.message)
-    }
-
-    return json;
-};
+// import styles from "./FileUploadButton.module.css";
+import Button from "../../UI/Button/Button"
+import {getPresignedURL, uploadFileToS3} from "../../models/aws_api";
 
 /**
  * Component renders a simple "Select file..." button which opens a file browser.
@@ -59,8 +26,6 @@ const FileUploadButton = (props) => (
             }
             reader.readAsText(selectedFile.src.file);
 
-            // readFiles([selectedFile]);
-
             // Step 1 - get pre-signed POST data.
             const presignedURL = await getPresignedURL(selectedFile);
             // Step 2 - upload the file to S3.
@@ -75,10 +40,11 @@ const FileUploadButton = (props) => (
         }}
     >
         {({ browseFiles }) =>
-            <button
-                className={styles.FileUploadButtonButton}
-                onClick={browseFiles}>Upload
-            </button>}
+            <Button
+                title="Upload file to S3"
+                text="Upload"
+                onClick={browseFiles}>
+            </Button>}
     </Files>
 );
 
