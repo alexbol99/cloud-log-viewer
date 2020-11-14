@@ -3,7 +3,8 @@
 }
 
 .RunningLogListItem:hover {
-    background-color: lightcyan;
+    background-color: rgba(147, 128, 115, 0.1);
+    /*background-color: #f9f9f9;*/
 }
 
 .RunningLogListItemClicked {

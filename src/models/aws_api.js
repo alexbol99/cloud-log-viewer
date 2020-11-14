@@ -33,24 +33,38 @@ export const getPresignedURL = async (selectedFile) => {
     return presignedURL;
 };
 
-export const uploadFileToS3 = async (presignedURL, file) => {
-    let json = null;
-    try {
-        let response = await fetch(presignedURL, {
+export const uploadFileToS3 = async (selectedFile) => {
+    // Step 1 - get pre-signed POST data.
+    const presignedURL = await getPresignedURL(selectedFile);
+    // if (!presignedURL)  failed to get presigned url - return rejected promise ?
+    // Step 2 - upload the file to S3.
+    return fetch(presignedURL, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: file
-        });
-        json = await response.json();
-    }
-    catch (err) {
-        console.log(err.message)
-    }
-
-    return json;
+            body: selectedFile.src.file
+        })
 };
+
+// export const uploadFileToS3 = async (presignedURL, file) => {
+//     let json = null;
+//     try {
+//         let response = await fetch(presignedURL, {
+//             method: "PUT",
+//             headers: {
+//                 "Content-Type": "application/json"
+//             },
+//             body: file
+//         });
+//         json = await response.json();
+//     }
+//     catch (err) {
+//         console.log(err.message)
+//     }
+//
+//     return json;
+// };
 
 export const deleteFilesFromS3 = async (keysToDelete) => {
     const url = `${api_uri}/delete`;

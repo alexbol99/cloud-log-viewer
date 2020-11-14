@@ -11,7 +11,7 @@ function RunningLogsListHeader(props) {
                 onUploadSucceed={props.onUploadSucceed}
             />
             <Button
-                title="Delete log file from S3"
+                title="Delete log files"
                 text="Delete"
                 // icon={faSyncAlt}
                 // spin={props.loading}
@@ -25,7 +25,7 @@ function RunningLogsListHeader(props) {
                 // onClick={props.onDeleteButtonPressed}
             />
             <Button
-                title="Reload logs from S3 bucket"
+                title="Reload files"
                 icon={faSyncAlt}
                 spin={props.loading}
                 onClick={props.onRefreshButtonPressed}

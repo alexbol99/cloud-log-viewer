@@ -31,11 +31,12 @@
     margin-top: 0.5em;
     margin-bottom: 0.5em;
     border-bottom: 1px solid #282c34;
+    animation-name: fadeIn;
+    animation-duration: 2s;
 }
 
 .RunningLogsListTable td {
-    animation-name: fadeIn;
-    animation-duration: 1s;
+
 }
 
 @keyframes fadeIn {

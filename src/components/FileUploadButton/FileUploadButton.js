@@ -3,7 +3,7 @@ import Files from "react-butterfiles";
 // import readFiles from "../../models/readFile";
 // import styles from "./FileUploadButton.module.css";
 import Button from "../../UI/Button/Button"
-import {getPresignedURL, uploadFileToS3} from "../../models/aws_api";
+import {uploadFileToS3} from "../../models/aws_api";
 
 /**
  * Component renders a simple "Select file..." button which opens a file browser.
@@ -11,41 +11,38 @@ import {getPresignedURL, uploadFileToS3} from "../../models/aws_api";
  * @returns {*}
  * @constructor
  */
-const FileUploadButton = (props) => (
-    <Files
-        onSuccess={async ([selectedFile]) => {
-            // Step 1 - validate that files ok
-            if (!(File && FileReader && FileList)) return;
-            // let files = event.target.files; // FileList object
+const FileUploadButton = (props) => {
+    const uploadFiles = async (selectedFiles) => {
+        let promises = selectedFiles.map( selectedFile => uploadFileToS3(selectedFile) );
+        let selectedFileNames = selectedFiles.map( selectedFile => selectedFile.name );
 
-            let reader = new FileReader();
-            let string = ""
-            reader.onload = (event) => {
-                string = event.target.result;
-                console.log(string);
-            }
-            reader.readAsText(selectedFile.src.file);
+        try {
+            let respArray = await Promise.all(promises);
+            // let json_promises = respArray.map(resp => resp.json())
+            // json = await Promise.all(json_promises);
+            props.onUploadSucceed(selectedFileNames);
+            return respArray;
+        }
+        catch (err) {
+            console.log(err);
+            return err.message;
+        }
+    }
 
-            // Step 1 - get pre-signed POST data.
-            const presignedURL = await getPresignedURL(selectedFile);
-            // Step 2 - upload the file to S3.
-            try {
-                const { file } = selectedFile.src;
-                const resp = await uploadFileToS3(presignedURL, file);
-                console.log("File was successfully uploaded! " + resp);
-                props.onUploadSucceed([selectedFile.name]);
-            } catch (e) {
-                console.log("An error occurred!", e.message);
-            }
-        }}
-    >
-        {({ browseFiles }) =>
-            <Button
-                title="Upload file to S3"
-                text="Upload"
-                onClick={browseFiles}>
-            </Button>}
-    </Files>
-);
+    return  (
+        <Files
+            multiple={true}
+            multipleMaxCount={3}
+            onSuccess={selectedFiles => uploadFiles(selectedFiles)}
+        >
+            {({ browseFiles }) =>
+                <Button
+                    title="Upload log files"
+                    text="Upload"
+                    onClick={browseFiles}>
+                </Button>}
+        </Files>
+    );
+}
 
 export default FileUploadButton;
