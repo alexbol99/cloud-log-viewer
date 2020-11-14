@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "/cloud-log-viewer/static/css/main.09422b14.chunk.css",
-    "main.js": "/cloud-log-viewer/static/js/main.7f5c2a91.chunk.js",
-    "main.js.map": "/cloud-log-viewer/static/js/main.7f5c2a91.chunk.js.map",
+    "main.css": "/cloud-log-viewer/static/css/main.ddc3f926.chunk.css",
+    "main.js": "/cloud-log-viewer/static/js/main.6f851eb5.chunk.js",
+    "main.js.map": "/cloud-log-viewer/static/js/main.6f851eb5.chunk.js.map",
     "runtime-main.js": "/cloud-log-viewer/static/js/runtime-main.a4353b50.js",
     "runtime-main.js.map": "/cloud-log-viewer/static/js/runtime-main.a4353b50.js.map",
     "static/js/2.849e095d.chunk.js": "/cloud-log-viewer/static/js/2.849e095d.chunk.js",
     "static/js/2.849e095d.chunk.js.map": "/cloud-log-viewer/static/js/2.849e095d.chunk.js.map",
     "index.html": "/cloud-log-viewer/index.html",
-    "precache-manifest.b5086bc94d26543d8fc76223f6bf020f.js": "/cloud-log-viewer/precache-manifest.b5086bc94d26543d8fc76223f6bf020f.js",
+    "precache-manifest.d6f6ed348aa297c53cc869554d09bb9f.js": "/cloud-log-viewer/precache-manifest.d6f6ed348aa297c53cc869554d09bb9f.js",
     "service-worker.js": "/cloud-log-viewer/service-worker.js",
-    "static/css/main.09422b14.chunk.css.map": "/cloud-log-viewer/static/css/main.09422b14.chunk.css.map",
+    "static/css/main.ddc3f926.chunk.css.map": "/cloud-log-viewer/static/css/main.ddc3f926.chunk.css.map",
     "static/js/2.849e095d.chunk.js.LICENSE.txt": "/cloud-log-viewer/static/js/2.849e095d.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.a4353b50.js",
     "static/js/2.849e095d.chunk.js",
-    "static/css/main.09422b14.chunk.css",
-    "static/js/main.7f5c2a91.chunk.js"
+    "static/css/main.ddc3f926.chunk.css",
+    "static/js/main.6f851eb5.chunk.js"
   ]
 }
