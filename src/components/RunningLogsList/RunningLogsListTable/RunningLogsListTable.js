@@ -27,6 +27,7 @@ function RunningLogsListTable(props) {
         }
 
         document.addEventListener('keydown', handleKeyDown);
+
         return () => {
             document.removeEventListener('keydown', handleKeyDown);
         };
@@ -48,9 +49,9 @@ function RunningLogsListTable(props) {
                 <table className={styles.RunningLogsListTable}>
                     <thead>
                     <tr>
-                        {/*<th style={{width: "5%"}}>[]</th>*/}
+                        <th style={{width: "3%"}}>✓</th>
                         <th style={{width:"15%"}}>Running date</th>
-                        <th style={{width:"25%"}}>Job Name</th>
+                        <th style={{width:"22%"}}>Job Name</th>
                         <th style={{width:"3%"}}>Step</th>
                         <th style={{width:"15%"}}>Checklist</th>
                         <th style={{width:"5%"}}># Actions</th>
@@ -65,8 +66,10 @@ function RunningLogsListTable(props) {
                             <RunningLogsListItem key={index}
                                                  data={data}
                                                  selected={props.selectedIndex===index}
+                                                 marked={data.marked}
                                                  batchFailed={!!data.errorTime}
                                                  itemClicked={() => props.logItemClicked(index)}
+                                                 checkMarkClicked = {() => props.checkMarkClicked(index)}
                             />
                         )}
                     </tbody>

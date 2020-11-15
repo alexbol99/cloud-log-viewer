@@ -11,10 +11,6 @@ function RunningLogsListItem(props) {
         }
     })
 
-    let style = props.selected ? styles.RunningLogListItemClicked : styles.RunningLogListItem;
-    style = props.batchFailed ? `${style} ${styles.RunningLogListItemFailed}` : style;
-    // let object_url = "https://s3.console.aws.amazon.com/s3/object/acp-cloud-logs/"+props.data.key;
-
     const scrollIntoView = () => {
         const tableBody = refElement.current.parentElement;
         const table = tableBody.parentElement;
@@ -37,14 +33,38 @@ function RunningLogsListItem(props) {
         setShowFileContentPopup(false)
     }
 
+    const itemClicked = (e) => {
+        if (e.ctrlKey || e.shiftKey) {
+            e.stopPropagation();
+            e.preventDefault();
+            props.itemClicked()
+        }
+    }
+    const checkMarkClicked = (e) => {
+        if (!props.selected) {  // selected will stay marked
+            if (e.ctrlKey || e.shiftKey) {
+                e.stopPropagation();
+                e.preventDefault();
+                props.checkMarkClicked()
+            }
+        }
+    }
+
+    let style = props.selected ? styles.RunningLogListItemClicked : styles.RunningLogListItem;
+    style = props.batchFailed ? `${style} ${styles.RunningLogListItemFailed}` : style;
+    // let object_url = "https://s3.console.aws.amazon.com/s3/object/acp-cloud-logs/"+props.data.key;
+
+    let checkMarkStyle = props.marked ?
+        styles.RunningLogListItemCheckMarkClicked : styles.RunningLogListItemCheckMarkNotClicked;
+
     return (
-        <React.Fragment>
+        <>
             <tr className={style} onClick={props.itemClicked} ref={refElement}>
-                {/*<td>*/}
-                {/*    <h4 className={styles.RunningLogListItemCheckMark}>*/}
-                {/*        ✓*/}
-                {/*    </h4>*/}
-                {/*</td>*/}
+                    <td onClick={checkMarkClicked}>
+                        <h4 className={checkMarkStyle} >
+                            ✓
+                        </h4>
+                    </td>
                 <td>
                     {props.data.runningDate}
                 </td>
@@ -86,7 +106,7 @@ function RunningLogsListItem(props) {
                     content={props.data.text}
                 /> : null }
 
-        </React.Fragment>
+        </>
     );
 }
 

@@ -81,7 +81,8 @@ export function getListData(localData) {
         batchJobsNum: localData?.batch.length,
         key: localData?.key,
         errorTime: localData?.errorTime,
-        text: localData?.text
+        text: localData?.text,
+        marked: localData?.marked
     }
 }
 

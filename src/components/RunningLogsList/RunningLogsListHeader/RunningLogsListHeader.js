@@ -17,19 +17,19 @@ function RunningLogsListHeader(props) {
                 // spin={props.loading}
                 onClick={props.onDeleteButtonPressed}
             />
-            <Button
-                title="Compare two logs"
-                text="Compare"
-                // icon={faSyncAlt}
-                // spin={props.loading}
-                // onClick={props.onDeleteButtonPressed}
-            />
-            <Button
-                title="Reload files"
-                icon={faSyncAlt}
-                spin={props.loading}
-                onClick={props.onRefreshButtonPressed}
-            />
+            {/*<Button*/}
+            {/*    title="Compare two logs"*/}
+            {/*    text="Compare"*/}
+            {/*    // icon={faSyncAlt}*/}
+            {/*    // spin={props.loading}*/}
+            {/*    // onClick={props.onDeleteButtonPressed}*/}
+            {/*/>*/}
+            {/*<Button*/}
+            {/*    title="Reload files"*/}
+            {/*    icon={faSyncAlt}*/}
+            {/*    spin={props.loading}*/}
+            {/*    onClick={props.onRefreshButtonPressed}*/}
+            {/*/>*/}
 
             {/*<span>Amazon s3 ({props.awsRegion}) ></span>*/}
             {/*<span>*/}

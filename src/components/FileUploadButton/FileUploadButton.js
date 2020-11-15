@@ -32,7 +32,7 @@ const FileUploadButton = (props) => {
     return  (
         <Files
             multiple={true}
-            multipleMaxCount={3}
+            multipleMaxCount={300}
             onSuccess={selectedFiles => uploadFiles(selectedFiles)}
         >
             {({ browseFiles }) =>

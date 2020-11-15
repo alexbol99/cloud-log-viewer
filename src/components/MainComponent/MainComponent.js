@@ -12,7 +12,6 @@ function MainComponent(props) {
     const [loading, setLoading] = useState(false);
 
     const numInChunk = 8;
-    let logsListData = [];
     let chartData = null;
     let runData = null;
 
@@ -26,7 +25,7 @@ function MainComponent(props) {
     }
 
     const fetchMoreData = async (keysListToFetch) => {
-        setLoading(true);
+        // setLoading(true);
 
         let keysList = keysListToFetch || await fetchKeysList();
         let filteredKeysList = filterNewKeysList(keysList);
@@ -41,7 +40,8 @@ function MainComponent(props) {
 
         // If all data loaded, render list and select first row
         if (localDataArray.length > 0) {
-            setLoading(false);
+            // setLoading(false);
+            localDataArray[0].marked = true;
             setLogDataArray(localDataArray);             // trigger rendering
         }
     }
@@ -63,19 +63,37 @@ function MainComponent(props) {
     }
 
     // Callback to set new chart data and update selected index
-    const logItemClicked = (index) => {
-        setIndex(index);                                     // trigger rendering
+    const logItemClicked = (clickedIndex) => {
+        let newLogDataArray = logDataArray.slice();
+        newLogDataArray.forEach( (data, i) => data.marked = (i == clickedIndex));
+        setLogDataArray(newLogDataArray);             // trigger rendering
+        setIndex(clickedIndex);                       // trigger rendering
+    }
+
+    const checkMarkClicked = (clickedIndex) => {
+        if (clickedIndex === index) return;
+        let newLogDataArray = logDataArray.slice();
+        newLogDataArray.forEach( (data, i) =>
+            i == clickedIndex ? data.marked = !data.marked : data.marked);
+        setLogDataArray(newLogDataArray);             // trigger rendering
     }
 
     const deleteFile = async () => {
-        if (!index) return
-        let logFileData = logDataArray[index];
-        let key = logFileData.key;
-        alert(`file ${logFileData.key} will be deleted`)
-
-        let deletedKeys = await deleteFilesFromS3([key]);
-        let newLogDataArray = logDataArray.filter( data => !deletedKeys.includes(data.key));
-        setLogDataArray(newLogDataArray);             // trigger rendering
+        let keysToDelete = logDataArray
+            .filter( data => data.marked )
+            .map( data => data.key);
+        if (keysToDelete.length === 0) return;
+        let keyStr = keysToDelete.join("\n");
+        let ok = window.confirm(`File(s) will be deleted:\n ${keyStr}`)
+        if (ok) {
+            let deletedKeys = await deleteFilesFromS3(keysToDelete);
+            let newLogDataArray = logDataArray.filter(data => !deletedKeys.includes(data.key));
+            // setLoading(true);
+            if (newLogDataArray.length > 0) {
+                setLogDataArray(newLogDataArray);             // trigger rendering
+                setIndex(0);
+            }
+        }
     }
 
     // Effect to load all data from AWS s3 bucket after component mounted
@@ -87,8 +105,6 @@ function MainComponent(props) {
 
     // Setup data before rendering
     if (logDataArray.length > 0) {
-        logsListData = logDataArray.map(data => getListData(data))
-
         let localData = logDataArray[index];
         try {
             chartData = getChartData(localData);
@@ -96,17 +112,17 @@ function MainComponent(props) {
         catch (e) {
             chartData = null;
         }
-
         runData = getListData(localData);
     }
 
     return (
         <main className={styles.MainComponent}>
             <RunningLogsList
-                logsListData={logsListData}
+                logDataArray={logDataArray}
                 selectedIndex={index}
                 loading={loading}
                 logItemClicked={logItemClicked}
+                checkMarkClicked={checkMarkClicked}
                 onUploadSucceed={fetchUploaded}
                 onDeleteButtonPressed={deleteFile}
                 onRefreshButtonPressed={syncData}
