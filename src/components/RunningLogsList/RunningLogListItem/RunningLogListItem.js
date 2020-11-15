@@ -35,11 +35,13 @@ function RunningLogsListItem(props) {
 
     const itemClicked = (e) => {
         if (e.ctrlKey || e.shiftKey) {
-            e.stopPropagation();
-            e.preventDefault();
-            props.itemClicked()
+            return;
         }
+        e.stopPropagation();
+        e.preventDefault();
+        props.itemClicked()
     }
+
     const checkMarkClicked = (e) => {
         if (!props.selected) {  // selected will stay marked
             if (e.ctrlKey || e.shiftKey) {
@@ -59,7 +61,7 @@ function RunningLogsListItem(props) {
 
     return (
         <>
-            <tr className={style} onClick={props.itemClicked} ref={refElement}>
+            <tr className={style} onClick={itemClicked} ref={refElement}>
                     <td onClick={checkMarkClicked}>
                         <h4 className={checkMarkStyle} >
                             ✓

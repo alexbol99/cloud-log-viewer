@@ -65,7 +65,7 @@ function MainComponent(props) {
     // Callback to set new chart data and update selected index
     const logItemClicked = (clickedIndex) => {
         let newLogDataArray = logDataArray.slice();
-        newLogDataArray.forEach( (data, i) => data.marked = (i == clickedIndex));
+        newLogDataArray.forEach( (data, i) => data.marked = (i === clickedIndex));
         setLogDataArray(newLogDataArray);             // trigger rendering
         setIndex(clickedIndex);                       // trigger rendering
     }
@@ -74,7 +74,7 @@ function MainComponent(props) {
         if (clickedIndex === index) return;
         let newLogDataArray = logDataArray.slice();
         newLogDataArray.forEach( (data, i) =>
-            i == clickedIndex ? data.marked = !data.marked : data.marked);
+            i === clickedIndex ? data.marked = !data.marked : data.marked);
         setLogDataArray(newLogDataArray);             // trigger rendering
     }
 
