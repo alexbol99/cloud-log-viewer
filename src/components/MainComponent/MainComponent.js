@@ -4,7 +4,7 @@ import RunningLogsList from "../RunningLogsList/RunningLogsList";
 import VegaLiteChart from "../VegaLiteChart/VegaLiteChart";
 import {getChartData, getListData} from "../../models/logData";
 import {parse} from "../../models/logFileParser";
-import {fetchFileContentByKeysList, fetchKeysList, deleteFilesFromS3} from "../../models/aws_api";
+import {fetchFileContentByKeysList, fetchFileContent, fetchKeysList, deleteFilesFromS3} from "../../models/aws_api";
 
 function MainComponent(props) {
     const [logDataArray, setLogDataArray] = useState([]);
@@ -24,6 +24,15 @@ function MainComponent(props) {
         return dataArray;
     }
 
+    // Fetch content of one file from s3 bucket by given key
+    const fetchData = async (key, ind) => {
+        let text = await fetchFileContent(key);
+        let data = parse(text.text);
+        data.key = ind;
+        data.text = text.text;
+        return data;
+    }
+
     const fetchMoreData = async (keysListToFetch) => {
         // setLoading(true);
 
@@ -31,9 +40,22 @@ function MainComponent(props) {
         let filteredKeysList = filterNewKeysList(keysList);
 
         let chunkOfKeysList = filteredKeysList.slice(0,numInChunk);
+
+        // for (let i=0; i < chunkOfKeysList; i++) {
+        //     let data = await fetchData(chunkOfKeysList[i], i);
+        //     let newDataArray = logDataArray.slice();
+        //     newDataArray.push(data);
+        //     newDataArray.sort(function(a,b){
+        //         return new Date(b.runningDate) - new Date(a.runningDate);
+        //     });
+        //     if (newDataArray.length === 1) {
+        //         newDataArray[0].marked = true;
+        //     }
+        //     setLogDataArray(newDataArray);             // trigger rendering
+        // }
+
         let newDataArray = await fetchDataByKeysList(chunkOfKeysList);
         let localDataArray = logDataArray.concat(newDataArray);
-
         localDataArray.sort(function(a,b){
             return new Date(b.runningDate) - new Date(a.runningDate);
         });
@@ -84,7 +106,10 @@ function MainComponent(props) {
             .map( data => data.key);
         if (keysToDelete.length === 0) return;
         let keyStr = keysToDelete.join("\n");
-        let ok = window.confirm(`File(s) will be deleted:\n ${keyStr}`)
+        let message = keysToDelete.length === 1 ?
+            `1 file will be deleted:\n ${keyStr}` :
+            `${keysToDelete.length} files will be deleted:\n ${keyStr}`;
+        let ok = window.confirm(message);
         if (ok) {
             let deletedKeys = await deleteFilesFromS3(keysToDelete);
             let newLogDataArray = logDataArray.filter(data => !deletedKeys.includes(data.key));

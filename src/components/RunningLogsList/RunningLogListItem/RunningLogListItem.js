@@ -34,21 +34,13 @@ function RunningLogsListItem(props) {
     }
 
     const itemClicked = (e) => {
-        if (e.ctrlKey || e.shiftKey) {
-            return;
+        if ((e.ctrlKey || e.shiftKey) && !props.selected) { // selected will stay marked
+            e.stopPropagation();
+            e.preventDefault();
+            props.checkMarkClicked()
         }
-        e.stopPropagation();
-        e.preventDefault();
-        props.itemClicked()
-    }
-
-    const checkMarkClicked = (e) => {
-        if (!props.selected) {  // selected will stay marked
-            if (e.ctrlKey || e.shiftKey) {
-                e.stopPropagation();
-                e.preventDefault();
-                props.checkMarkClicked()
-            }
+        else {
+            props.itemClicked()
         }
     }
 
@@ -62,7 +54,7 @@ function RunningLogsListItem(props) {
     return (
         <>
             <tr className={style} onClick={itemClicked} ref={refElement}>
-                    <td onClick={checkMarkClicked}>
+                    <td>
                         <h4 className={checkMarkStyle} >
                             ✓
                         </h4>

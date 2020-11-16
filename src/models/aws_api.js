@@ -10,6 +10,12 @@ export const fetchKeysList = async() => {
     return keysList;
 }
 
+// Fetch content of single file from s3 bucket key
+export const fetchFileContent = async (key) => {
+    let resp = await fetch(`${api_uri}/list/${key}`);
+    let text = await resp.json();
+    return text;
+}
 // Fetch content of files from s3 bucket by given list of keys
 export const fetchFileContentByKeysList = async (keysList) => {
     let promises = keysList.map (key => fetch(`${api_uri}/list/${key}`))
