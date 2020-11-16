@@ -24,8 +24,8 @@
 }
 
 .RunningLogsListTable tr,td, th {
-    padding-bottom: 0.8em;
-    padding-top: 0.8em;
+    /*padding-bottom: 0.8em;*/
+    /*padding-top: 0.8em;*/
     padding-left: 0.3em;
     padding-right: 1.3em;
     margin-top: 0.5em;

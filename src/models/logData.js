@@ -96,7 +96,13 @@ export function getListData(localData) {
 // }
 
 function time_diff(start_time, complete_time) {
-    return msecToHHMMSS(complete_time - start_time);
+    if (start_time instanceof Date && !isNaN(start_time) &&
+    complete_time instanceof Date && !isNaN(complete_time)) {
+     return msecToHHMMSS(complete_time - start_time);
+    }
+    else {
+        return 0;
+    }
 }
 
 function msecToHHMMSS(time) {
