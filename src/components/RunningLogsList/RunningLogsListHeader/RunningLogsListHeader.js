@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from '../../../UI/Button/Button';
-// import { faSyncAlt } from '@fortawesome/free-solid-svg-icons'
+import { faSyncAlt } from '@fortawesome/free-solid-svg-icons'
 import FileUploadButton from "../../FileUploadButton/FileUploadButton";
 import styles from './RunningLogsListHeader.module.css'
 
@@ -24,12 +24,12 @@ function RunningLogsListHeader(props) {
             {/*    // spin={props.loading}*/}
             {/*    // onClick={props.onDeleteButtonPressed}*/}
             {/*/>*/}
-            {/*<Button*/}
-            {/*    title="Reload files"*/}
-            {/*    icon={faSyncAlt}*/}
-            {/*    spin={props.loading}*/}
-            {/*    onClick={props.onRefreshButtonPressed}*/}
-            {/*/>*/}
+            <Button
+                title="Reload files"
+                icon={faSyncAlt}
+                spin={props.loading}
+                onClick={props.onRefreshButtonPressed}
+            />
 
             {/*<span>Amazon s3 ({props.awsRegion}) ></span>*/}
             {/*<span>*/}

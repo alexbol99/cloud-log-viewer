@@ -1,12 +1,28 @@
 import React from 'react';
 import { VegaLite } from 'react-vega'
 import styles from './VegaLiteChart.module.css';
+import {getChartData, getListData} from "../../models/logData";
 
 function VegaLiteChart(props) {
+    // Setup data before rendering
+    let chartData = null;
+    let runData = null;
+
+    if (props.logDataArray.length > 0) {
+        let localData = props.logDataArray[props.index];
+        try {
+            chartData = getChartData(localData);
+        }
+        catch (e) {
+            chartData = null;
+        }
+        runData = getListData(localData);
+    }
+
     const spec = {
         "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
-        title: props.runData?.jobName,
-        data: { values: props.data },
+        title: runData?.jobName,
+        data: { values: chartData },
         mark: { type: "bar", tooltip: [] },
         encoding: {
             x: {
@@ -34,8 +50,8 @@ function VegaLiteChart(props) {
     return (
         <div className={styles.VegaLiteChart}>
             {
-                props.data && props.runData.runningTime ?
-                    <VegaLite spec={spec} data={props.data}/> : null
+                chartData && runData.runningTime ?
+                    <VegaLite spec={spec} data={chartData}/> : null
             }
         </div>
     );

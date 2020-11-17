@@ -49,7 +49,7 @@ function RunningLogsListTable(props) {
                 <table className={styles.RunningLogsListTable}>
                     <thead>
                     <tr>
-                        <th style={{width: "3%"}}>✓</th>
+                        <th className={styles.RunningLogsListTableCheckMark} style={{width: "3%"}}>✓</th>
                         <th style={{width:"15%"}}>Running date</th>
                         <th style={{width:"22%"}}>Job Name</th>
                         <th style={{width:"3%"}}>Step</th>

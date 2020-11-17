@@ -2,70 +2,71 @@ import React, {useEffect, useState} from 'react';
 import styles from './MainComponent.module.css';
 import RunningLogsList from "../RunningLogsList/RunningLogsList";
 import VegaLiteChart from "../VegaLiteChart/VegaLiteChart";
-import {getChartData, getListData} from "../../models/logData";
 import {parse} from "../../models/logFileParser";
-import {fetchFileContentByKeysList, fetchFileContent, fetchKeysList, deleteFilesFromS3} from "../../models/aws_api";
+import {/*fetchFileContentByKeysList,*/ fetchFileContent, fetchKeysList, deleteFilesFromS3} from "../../models/aws_api";
 
 function MainComponent(props) {
     const [logDataArray, setLogDataArray] = useState([]);
     const [index, setIndex] = useState(0);
     const [loading, setLoading] = useState(false);
 
-    const numInChunk = 8;
-    let chartData = null;
-    let runData = null;
+    // const numInChunk = 8;
 
     // Fetch content of files from s3 bucket by given list of keys
-    const fetchDataByKeysList = async (keysList) => {
-        let textArray = await fetchFileContentByKeysList(keysList);
-        let dataArray = textArray.map( e => parse(e.text));
-        dataArray.forEach( (data,i) => data.key = keysList[i] )
-        dataArray.forEach( (data,i) => data.text = textArray[i].text )
-        return dataArray;
-    }
+    // const fetchDataByKeysList = async (keysList) => {
+    //     let textArray = await fetchFileContentByKeysList(keysList);
+    //     let dataArray = textArray.map( e => parse(e.text));
+    //     dataArray.forEach( (data,i) => data.key = keysList[i] )
+    //     dataArray.forEach( (data,i) => data.text = textArray[i].text )
+    //     return dataArray;
+    // }
 
     // Fetch content of one file from s3 bucket by given key
-    const fetchData = async (key, ind) => {
-        let text = await fetchFileContent(key);
-        let data = parse(text.text);
-        data.key = ind;
-        data.text = text.text;
-        return data;
+    const fetchData = async (localDataArray, key, index) => {
+        return new Promise( async (resolve, reject) => {
+            try {
+                let text = await fetchFileContent(key);
+                let data = parse(text.text);
+                data.key = key;
+                data.text = text.text;
+                data.marked = false;
+
+                localDataArray[index] = data;
+                let newDataArray = logDataArray.concat(localDataArray);
+                newDataArray.filter (data => data !== undefined)
+                setLogDataArray(newDataArray);             // trigger rendering
+                resolve(data);
+            }
+            catch (err) {
+                reject(err.message)
+            }
+        })
     }
 
     const fetchMoreData = async (keysListToFetch) => {
-        // setLoading(true);
+        setLoading(true);
 
         let keysList = keysListToFetch || await fetchKeysList();
         let filteredKeysList = filterNewKeysList(keysList);
-
-        let chunkOfKeysList = filteredKeysList.slice(0,numInChunk);
-
-        // for (let i=0; i < chunkOfKeysList; i++) {
-        //     let data = await fetchData(chunkOfKeysList[i], i);
-        //     let newDataArray = logDataArray.slice();
-        //     newDataArray.push(data);
-        //     newDataArray.sort(function(a,b){
-        //         return new Date(b.runningDate) - new Date(a.runningDate);
-        //     });
-        //     if (newDataArray.length === 1) {
-        //         newDataArray[0].marked = true;
-        //     }
-        //     setLogDataArray(newDataArray);             // trigger rendering
-        // }
-
-        let newDataArray = await fetchDataByKeysList(chunkOfKeysList);
-        let localDataArray = logDataArray.concat(newDataArray);
-        localDataArray.sort(function(a,b){
-            return new Date(b.runningDate) - new Date(a.runningDate);
-        });
-
-        // If all data loaded, render list and select first row
-        if (localDataArray.length > 0) {
-            // setLoading(false);
-            localDataArray[0].marked = true;
-            setLogDataArray(localDataArray);             // trigger rendering
+        // let chunkOfKeysList = filteredKeysList.slice(0,numInChunk);
+        if (filteredKeysList.length > 0) {
+            let localDataArray = new Array(filteredKeysList.length);
+            let promises = filteredKeysList.map( (key, index) => fetchData(localDataArray, key, index));
+            try {
+                let localDataArray = await Promise.all(promises);
+                localDataArray.sort(function(a,b){
+                    return new Date(b.runningDate) - new Date(a.runningDate);
+                });
+                if (!localDataArray.some(data => data.marked)) {
+                    localDataArray[0].marked = true;
+                }
+                setLogDataArray(localDataArray);             // trigger rendering
+            } catch (err) {
+                console.log(err.message)
+            }
         }
+
+        setLoading(false);
     }
 
     // Filter keysList: keep only new keys that do not exist in logDataArray
@@ -77,7 +78,6 @@ function MainComponent(props) {
 
     const syncData = () => {
         fetchMoreData()
-        // setLoading(true)
     }
 
     const fetchUploaded = (keysList) => {
@@ -112,33 +112,18 @@ function MainComponent(props) {
         let ok = window.confirm(message);
         if (ok) {
             let deletedKeys = await deleteFilesFromS3(keysToDelete);
+            let firstDeletedInd = logDataArray.findIndex(data => deletedKeys.includes(data.key));
+            let newIndex = Math.max(0, firstDeletedInd - 1);
             let newLogDataArray = logDataArray.filter(data => !deletedKeys.includes(data.key));
-            // setLoading(true);
-            if (newLogDataArray.length > 0) {
-                setLogDataArray(newLogDataArray);             // trigger rendering
-                setIndex(0);
-            }
+            setLogDataArray(newLogDataArray);             // trigger rendering
+            setIndex(newIndex);
         }
     }
 
     // Effect to load all data from AWS s3 bucket after component mounted
     useEffect( () => {
-        if (logDataArray.length === 0) {
-            fetchMoreData();
-        }
-    });
-
-    // Setup data before rendering
-    if (logDataArray.length > 0) {
-        let localData = logDataArray[index];
-        try {
-            chartData = getChartData(localData);
-        }
-        catch (e) {
-            chartData = null;
-        }
-        runData = getListData(localData);
-    }
+        fetchMoreData();
+    },[]);
 
     return (
         <main className={styles.MainComponent}>
@@ -152,7 +137,10 @@ function MainComponent(props) {
                 onDeleteButtonPressed={deleteFile}
                 onRefreshButtonPressed={syncData}
             />
-            <VegaLiteChart data={chartData} runData={runData} />
+            <VegaLiteChart
+                logDataArray={logDataArray}
+                index={index}
+            />
         </main>
     );
 }

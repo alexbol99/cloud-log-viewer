@@ -39,6 +39,10 @@
 
 }
 
+.RunningLogsListTableCheckMark {
+    text-align: center;
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;

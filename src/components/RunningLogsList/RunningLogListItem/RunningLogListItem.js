@@ -55,7 +55,7 @@ function RunningLogsListItem(props) {
         <>
             <tr className={style} onClick={itemClicked} ref={refElement}>
                     <td>
-                        <h4 className={checkMarkStyle} >
+                        <h4 className={checkMarkStyle}>
                             ✓
                         </h4>
                     </td>

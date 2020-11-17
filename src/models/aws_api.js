@@ -17,13 +17,13 @@ export const fetchFileContent = async (key) => {
     return text;
 }
 // Fetch content of files from s3 bucket by given list of keys
-export const fetchFileContentByKeysList = async (keysList) => {
-    let promises = keysList.map (key => fetch(`${api_uri}/list/${key}`))
-    let respArray = await Promise.all(promises)
-    let json_promises = respArray.map(resp => resp.json())
-    let textArray = await Promise.all(json_promises);
-    return textArray;
-}
+// export const fetchFileContentByKeysList = async (keysList) => {
+//     let promises = keysList.map (key => fetch(`${api_uri}/list/${key}`))
+//     let respArray = await Promise.all(promises)
+//     let json_promises = respArray.map(resp => resp.json())
+//     let textArray = await Promise.all(json_promises);
+//     return textArray;
+// }
 
 export const getPresignedURL = async (selectedFile) => {
     const url = `${api_uri}/get-presigned-url/${selectedFile.name}`
