@@ -138,7 +138,6 @@ function MainComponent(props) {
                 onDeleteButtonPressed={deleteFile}
                 onRefreshButtonPressed={syncData}
             />
-            <hr />
             <VegaLiteChart
                 logDataArray={logDataArray}
                 index={index}

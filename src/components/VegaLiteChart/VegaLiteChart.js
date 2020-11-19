@@ -1,5 +1,5 @@
 import React from 'react';
-import { VegaLite, Vega } from 'react-vega'
+import { VegaLite } from 'react-vega'
 import styles from './VegaLiteChart.module.css';
 import {getChartData, getListData} from "../../models/logData";
 
@@ -62,7 +62,7 @@ function VegaLiteChart(props) {
                             editor: false
                         }}
                         downloadFileName={runData?.jobName}
-                        theme="fivethirtyeight"
+                        theme="urbaninstitute"
                     /> : null
             }
         </div>
