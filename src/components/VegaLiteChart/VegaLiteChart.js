@@ -1,5 +1,5 @@
 import React from 'react';
-import { VegaLite } from 'react-vega'
+import { VegaLite, Vega } from 'react-vega'
 import styles from './VegaLiteChart.module.css';
 import {getChartData, getListData} from "../../models/logData";
 
@@ -42,16 +42,28 @@ function VegaLiteChart(props) {
             },
             color: { field: "Object" }
         },
+        // resize: true,
         width: 800,
         // height: 800,
-        autosize: "fit"
+        autosize: "fit",
     }
 
     return (
         <div className={styles.VegaLiteChart}>
             {
                 chartData && runData.runningTime ?
-                    <VegaLite spec={spec} data={chartData}/> : null
+                    <VegaLite
+                        spec={spec}
+                        data={chartData}
+                        actions={{
+                            export: true,
+                            source: false,
+                            compiled: false,
+                            editor: false
+                        }}
+                        downloadFileName={runData?.jobName}
+                        theme="fivethirtyeight"
+                    /> : null
             }
         </div>
     );

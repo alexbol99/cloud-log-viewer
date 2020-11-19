@@ -53,14 +53,15 @@ function MainComponent(props) {
             let localDataArray = new Array(filteredKeysList.length);
             let promises = filteredKeysList.map( (key, index) => fetchData(localDataArray, key, index));
             try {
-                let localDataArray = await Promise.all(promises);
-                localDataArray.sort(function(a,b){
+                let fetchedDataArray = await Promise.all(promises);
+                let newDataArray = logDataArray.concat(fetchedDataArray);
+                newDataArray.sort(function(a,b){
                     return new Date(b.runningDate) - new Date(a.runningDate);
                 });
-                if (!localDataArray.some(data => data.marked)) {
-                    localDataArray[0].marked = true;
+                if (!newDataArray.some(data => data.marked)) {
+                    newDataArray[0].marked = true;
                 }
-                setLogDataArray(localDataArray);             // trigger rendering
+                setLogDataArray(newDataArray);             // trigger rendering
             } catch (err) {
                 console.log(err.message)
             }
@@ -137,6 +138,7 @@ function MainComponent(props) {
                 onDeleteButtonPressed={deleteFile}
                 onRefreshButtonPressed={syncData}
             />
+            <hr />
             <VegaLiteChart
                 logDataArray={logDataArray}
                 index={index}
