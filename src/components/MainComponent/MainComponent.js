@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import styles from './MainComponent.module.css';
 import RunningLogsList from "../RunningLogsList/RunningLogsList";
-import VegaLiteChart from "../VegaLiteChart/VegaLiteChart";
+import ChartAreaComponent from "../ChartAreaComponent/ChartAreaComponent";
 import {parse} from "../../models/logFileParser";
 import {/*fetchFileContentByKeysList,*/ fetchFileContent, fetchKeysList, deleteFilesFromS3} from "../../models/aws_api";
 
 function MainComponent(props) {
     const [logDataArray, setLogDataArray] = useState([]);
-    const [index, setIndex] = useState(0);
+    // const [index, setIndex] = useState(0);
     const [loading, setLoading] = useState(false);
 
     // const numInChunk = 8;
@@ -30,6 +30,7 @@ function MainComponent(props) {
                 data.key = key;
                 data.text = text.text;
                 data.marked = false;
+                data.selected = false;
 
                 localDataArray[index] = data;
                 let newDataArray = logDataArray.concat(localDataArray);
@@ -61,6 +62,9 @@ function MainComponent(props) {
                 if (!newDataArray.some(data => data.marked)) {
                     newDataArray[0].marked = true;
                 }
+                if (!newDataArray.some(data => data.selected)) {
+                    newDataArray[0].selected = true;
+                }
                 setLogDataArray(newDataArray);             // trigger rendering
             } catch (err) {
                 console.log(err.message)
@@ -88,13 +92,24 @@ function MainComponent(props) {
     // Callback to set new chart data and update selected index
     const logItemClicked = (clickedIndex) => {
         let newLogDataArray = logDataArray.slice();
-        newLogDataArray.forEach( (data, i) => data.marked = (i === clickedIndex));
+        newLogDataArray.forEach( (data, i) => {
+            data.marked = (i === clickedIndex);
+            data.selected = (i === clickedIndex);
+        });
         setLogDataArray(newLogDataArray);             // trigger rendering
-        setIndex(clickedIndex);                       // trigger rendering
+        // setIndex(clickedIndex);                    // trigger rendering
+    }
+
+    const logItemShiftClicked = (clickedIndex) => {
+        let newLogDataArray = logDataArray.slice();
+        newLogDataArray.forEach( (data, i) =>
+            i === clickedIndex ? data.selected = !data.selected : data.selected);
+        setLogDataArray(newLogDataArray);             // trigger rendering
+        // setIndex(clickedIndex);                    // trigger rendering
     }
 
     const checkMarkClicked = (clickedIndex) => {
-        if (clickedIndex === index) return;
+        // if (clickedIndex === index) return;
         let newLogDataArray = logDataArray.slice();
         newLogDataArray.forEach( (data, i) =>
             i === clickedIndex ? data.marked = !data.marked : data.marked);
@@ -113,11 +128,11 @@ function MainComponent(props) {
         let ok = window.confirm(message);
         if (ok) {
             let deletedKeys = await deleteFilesFromS3(keysToDelete);
-            let firstDeletedInd = logDataArray.findIndex(data => deletedKeys.includes(data.key));
-            let newIndex = Math.max(0, firstDeletedInd - 1);
+            // let firstDeletedInd = logDataArray.findIndex(data => deletedKeys.includes(data.key));
+            // let newIndex = Math.max(0, firstDeletedInd - 1);
             let newLogDataArray = logDataArray.filter(data => !deletedKeys.includes(data.key));
             setLogDataArray(newLogDataArray);             // trigger rendering
-            setIndex(newIndex);
+            // setIndex(newIndex);
         }
     }
 
@@ -130,17 +145,18 @@ function MainComponent(props) {
         <main className={styles.MainComponent}>
             <RunningLogsList
                 logDataArray={logDataArray}
-                selectedIndex={index}
+                // selectedIndex={index}
                 loading={loading}
                 logItemClicked={logItemClicked}
+                logItemShiftClicked={logItemShiftClicked}
                 checkMarkClicked={checkMarkClicked}
                 onUploadSucceed={fetchUploaded}
                 onDeleteButtonPressed={deleteFile}
                 onRefreshButtonPressed={syncData}
             />
-            <VegaLiteChart
-                logDataArray={logDataArray}
-                index={index}
+            <ChartAreaComponent
+                logDataArray={logDataArray.filter( data => data.selected )}
+                // index={index}
             />
         </main>
     );

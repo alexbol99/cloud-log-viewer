@@ -23,6 +23,7 @@ function RunningLogsList(props) {
                 logsListData={logsListData}
                 selectedIndex={props.selectedIndex}
                 logItemClicked={props.logItemClicked}
+                logItemShiftClicked={props.logItemShiftClicked}
                 checkMarkClicked={props.checkMarkClicked}
                 fetchMoreData={props.onRefreshButtonPressed}
             />

@@ -1,12 +1,14 @@
 import React, {useRef, useEffect, useState} from 'react';
 import styles from './RunningLogListItem.module.css';
 import FileContentPopup from "../../FileContentPopup/FileContentPopup";
+// import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 function RunningLogsListItem(props) {
     const [showFileContentPopup, setShowFileContentPopup] = useState(false);
     const refElement = useRef();
+
     useEffect( () => {
-        if (props.selected) {
+        if (props.data.selected) {
             scrollIntoView();
         }
     })
@@ -25,7 +27,7 @@ function RunningLogsListItem(props) {
     }
 
     // Callback to display Log File Content Popup
-    const showLogFileContentPopup = (index) => {
+    const showLogFileContentPopup = () => {
         setShowFileContentPopup(true)
     }
 
@@ -34,17 +36,22 @@ function RunningLogsListItem(props) {
     }
 
     const itemClicked = (e) => {
-        if ((e.ctrlKey || e.shiftKey) && !props.selected) { // selected will stay marked
-            e.stopPropagation();
-            e.preventDefault();
-            props.checkMarkClicked()
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (e.ctrlKey) {
+            props.checkMarkClicked();
+        }
+        else if (e.shiftKey) {
+            document.getSelection().empty();
+            props.itemShiftClicked();
         }
         else {
-            props.itemClicked()
+            props.itemClicked();
         }
     }
 
-    let style = props.selected ? styles.RunningLogListItemClicked : styles.RunningLogListItem;
+    let style = props.data.selected ? styles.RunningLogListItemClicked : styles.RunningLogListItem;
     style = props.batchFailed ? `${style} ${styles.RunningLogListItemFailed}` : style;
     // let object_url = "https://s3.console.aws.amazon.com/s3/object/acp-cloud-logs/"+props.data.key;
 
@@ -56,7 +63,9 @@ function RunningLogsListItem(props) {
             <tr className={style} onClick={itemClicked} ref={refElement}>
                     <td>
                         <h4 className={checkMarkStyle}>
-                            ✓
+                            {/*✓*/}
+                            {/*<FontAwesomeIcon icon="trash" />*/}
+                            X
                         </h4>
                     </td>
                 <td>

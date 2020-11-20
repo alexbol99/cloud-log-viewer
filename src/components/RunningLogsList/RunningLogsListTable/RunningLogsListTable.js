@@ -49,7 +49,7 @@ function RunningLogsListTable(props) {
                 <table className={styles.RunningLogsListTable}>
                     <thead>
                     <tr>
-                        <th className={styles.RunningLogsListTableCheckMark} style={{width: "3%"}}>✓</th>
+                        <th className={styles.RunningLogsListTableCheckMark} style={{width: "3%"}}>X</th>
                         <th style={{width:"15%"}}>Running date</th>
                         <th style={{width:"22%"}}>Job Name</th>
                         <th style={{width:"3%"}}>Step</th>
@@ -65,10 +65,11 @@ function RunningLogsListTable(props) {
                         {props.logsListData?.map( (data, index) =>
                             <RunningLogsListItem key={index}
                                                  data={data}
-                                                 selected={props.selectedIndex===index}
+                                                 // selected={props.selectedIndex===index}
                                                  marked={data.marked}
                                                  batchFailed={!!data.errorTime}
                                                  itemClicked={() => props.logItemClicked(index)}
+                                                 itemShiftClicked = {() => props.logItemShiftClicked(index)}
                                                  checkMarkClicked = {() => props.checkMarkClicked(index)}
                             />
                         )}

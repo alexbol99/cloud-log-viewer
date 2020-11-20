@@ -82,7 +82,8 @@ export function getListData(localData) {
         key: localData?.key,
         errorTime: localData?.errorTime,
         text: localData?.text,
-        marked: localData?.marked
+        marked: localData?.marked,
+        selected: localData?.selected
     }
 }
 

@@ -1,27 +1,28 @@
 import React from 'react';
 import { VegaLite } from 'react-vega'
 import styles from './VegaLiteChart.module.css';
-import {getChartData, getListData} from "../../models/logData";
+import {getChartData, getListData} from "../../../models/logData";
 
 function VegaLiteChart(props) {
     // Setup data before rendering
     let chartData = null;
     let runData = null;
 
-    if (props.logDataArray.length > 0) {
-        let localData = props.logDataArray[props.index];
-        try {
-            chartData = getChartData(localData);
-        }
-        catch (e) {
-            chartData = null;
-        }
-        runData = getListData(localData);
+    let localData = props.logData;
+    try {
+        chartData = getChartData(localData);
+    } catch (e) {
+        chartData = null;
     }
+    runData = getListData(localData);
 
+    const client = runData.key.split('-')[0] || "unknown";
     const spec = {
         "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
-        title: runData?.jobName,
+        title: {
+            text: runData?.jobName,
+            subtitle: `Client: ${client} Running time: ${runData?.runningTime}`
+        },
         data: { values: chartData },
         mark: { type: "bar", tooltip: [] },
         encoding: {
@@ -43,7 +44,7 @@ function VegaLiteChart(props) {
             color: { field: "Object" }
         },
         // resize: true,
-        width: 800,
+        width: props.width,
         // height: 800,
         autosize: "fit",
     }
