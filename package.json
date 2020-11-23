@@ -29,7 +29,7 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
-  "homepage": "https:cloudlogviewer.com",
+  "homepage": "http://www.cloudlogviewer.com",
   "eslintConfig": {
     "extends": "react-app"
   },

@@ -43,14 +43,14 @@
 
 .RunningLogListItemCheckMarkClicked {
     color: #303232;
-    /*text-align: center;*/
+    text-align: center;
     /*font-size: larger;*/
     padding-right: 0.3em;
 }
 
 .RunningLogListItemCheckMarkNotClicked {
     color: rgba(147, 128, 115, 0.5);
-    /*text-align: center;*/
+    text-align: center;
     /*font-size: larger;*/
     padding-right: 0.3em;
 }

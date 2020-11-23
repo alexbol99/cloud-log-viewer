@@ -54,8 +54,8 @@ function RunningLogsListTable(props) {
                         <th className={styles.RunningLogsListTableCheckMark} style={{width: "3%"}}>
                             <FontAwesomeIcon icon={faTrashAlt} />
                         </th>
-                        <th style={{width:"15%"}}>Running date</th>
-                        <th style={{width:"22%"}}>Job Name</th>
+                        <th style={{width:"12%"}}>Running date</th>
+                        <th style={{width:"25%"}}>Job Name</th>
                         <th style={{width:"3%"}}>Step</th>
                         <th style={{width:"15%"}}>Checklist</th>
                         <th style={{width:"5%"}}># Actions</th>
