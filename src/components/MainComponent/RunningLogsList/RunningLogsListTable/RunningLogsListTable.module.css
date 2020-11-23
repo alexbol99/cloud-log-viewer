@@ -41,6 +41,7 @@
 
 .RunningLogsListTableCheckMark {
     text-align: center;
+    padding-right: 0.3em;
 }
 
 @keyframes fadeIn {

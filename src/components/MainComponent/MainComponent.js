@@ -1,14 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import styles from './MainComponent.module.css';
-import RunningLogsList from "../RunningLogsList/RunningLogsList";
-import ChartAreaComponent from "../ChartAreaComponent/ChartAreaComponent";
+import RunningLogsList from "./RunningLogsList/RunningLogsList";
+import ChartAreaComponent from "./ChartAreaComponent/ChartAreaComponent";
 import {parse} from "../../models/logFileParser";
 import {/*fetchFileContentByKeysList,*/ fetchFileContent, fetchKeysList, deleteFilesFromS3} from "../../models/aws_api";
 
 function MainComponent(props) {
     const [logDataArray, setLogDataArray] = useState([]);
-    // const [index, setIndex] = useState(0);
     const [loading, setLoading] = useState(false);
+    const [searchJobNamePattern, setSearchJobNamePattern] = useState("");
 
     // const numInChunk = 8;
 
@@ -90,27 +90,27 @@ function MainComponent(props) {
     }
 
     // Callback to set new chart data and update selected index
-    const logItemClicked = (clickedIndex) => {
+    const logItemClicked = (clickedData) => {
         let newLogDataArray = logDataArray.slice();
+        let clickedIndex = newLogDataArray.findIndex( data => data.key === clickedData.key);
         newLogDataArray.forEach( (data, i) => {
             data.marked = (i === clickedIndex);
             data.selected = (i === clickedIndex);
         });
         setLogDataArray(newLogDataArray);             // trigger rendering
-        // setIndex(clickedIndex);                    // trigger rendering
     }
 
-    const logItemShiftClicked = (clickedIndex) => {
+    const logItemShiftClicked = (clickedData) => {
         let newLogDataArray = logDataArray.slice();
+        let clickedIndex = newLogDataArray.findIndex( data => data.key === clickedData.key);
         newLogDataArray.forEach( (data, i) =>
             i === clickedIndex ? data.selected = !data.selected : data.selected);
         setLogDataArray(newLogDataArray);             // trigger rendering
-        // setIndex(clickedIndex);                    // trigger rendering
     }
 
-    const checkMarkClicked = (clickedIndex) => {
-        // if (clickedIndex === index) return;
+    const checkMarkClicked = (clickedData) => {
         let newLogDataArray = logDataArray.slice();
+        let clickedIndex = newLogDataArray.findIndex( data => data.key === clickedData.key);
         newLogDataArray.forEach( (data, i) =>
             i === clickedIndex ? data.marked = !data.marked : data.marked);
         setLogDataArray(newLogDataArray);             // trigger rendering
@@ -132,8 +132,11 @@ function MainComponent(props) {
             // let newIndex = Math.max(0, firstDeletedInd - 1);
             let newLogDataArray = logDataArray.filter(data => !deletedKeys.includes(data.key));
             setLogDataArray(newLogDataArray);             // trigger rendering
-            // setIndex(newIndex);
         }
+    }
+
+    const searchJobNameHandler = (e) => {
+        setSearchJobNamePattern(e.target.value);
     }
 
     // Effect to load all data from AWS s3 bucket after component mounted
@@ -144,8 +147,8 @@ function MainComponent(props) {
     return (
         <main className={styles.MainComponent}>
             <RunningLogsList
-                logDataArray={logDataArray}
-                // selectedIndex={index}
+                logDataArray={logDataArray
+                    .filter(data => data.jobName.includes(searchJobNamePattern))}
                 loading={loading}
                 logItemClicked={logItemClicked}
                 logItemShiftClicked={logItemShiftClicked}
@@ -153,10 +156,12 @@ function MainComponent(props) {
                 onUploadSucceed={fetchUploaded}
                 onDeleteButtonPressed={deleteFile}
                 onRefreshButtonPressed={syncData}
+                onSearchJobNameChanged={searchJobNameHandler}
             />
             <ChartAreaComponent
-                logDataArray={logDataArray.filter( data => data.selected )}
-                // index={index}
+                logDataArray={logDataArray
+                    .filter(data => data.jobName.includes(searchJobNamePattern))
+                    .filter( data => data.selected )}
             />
         </main>
     );

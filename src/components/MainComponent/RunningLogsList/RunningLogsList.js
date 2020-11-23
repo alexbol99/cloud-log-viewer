@@ -1,8 +1,9 @@
 import React from 'react';
-import styles from './RunningLogsList.module.css';
 import RunningLogsListHeader from "./RunningLogsListHeader/RunningLogsListHeader";
 import RunningLogsListTable from "./RunningLogsListTable/RunningLogsListTable";
-import {getListData} from "../../models/logData";
+import {getListData} from "../../../models/logData";
+import SearchInputComponent from "./SearchInputComponent/SearchInputComponent";
+import styles from './RunningLogsList.module.css';
 
 function RunningLogsList(props) {
     // Setup data before rendering
@@ -17,6 +18,10 @@ function RunningLogsList(props) {
                 onUploadSucceed={props.onUploadSucceed}
                 onDeleteButtonPressed={props.onDeleteButtonPressed}
                 onRefreshButtonPressed={props.onRefreshButtonPressed}
+            />
+
+            <SearchInputComponent
+                onChange={props.onSearchJobNameChanged}
             />
 
             <RunningLogsListTable

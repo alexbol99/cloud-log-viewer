@@ -2,6 +2,8 @@ import React, {useEffect} from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import styles from './RunningLogsListTable.module.css';
 import RunningLogsListItem from "../RunningLogListItem/RunningLogListItem";
+import {faTrashAlt} from '@fortawesome/free-solid-svg-icons'
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 function RunningLogsListTable(props) {
     useEffect( () => {
@@ -49,7 +51,9 @@ function RunningLogsListTable(props) {
                 <table className={styles.RunningLogsListTable}>
                     <thead>
                     <tr>
-                        <th className={styles.RunningLogsListTableCheckMark} style={{width: "3%"}}>X</th>
+                        <th className={styles.RunningLogsListTableCheckMark} style={{width: "3%"}}>
+                            <FontAwesomeIcon icon={faTrashAlt} />
+                        </th>
                         <th style={{width:"15%"}}>Running date</th>
                         <th style={{width:"22%"}}>Job Name</th>
                         <th style={{width:"3%"}}>Step</th>
@@ -68,9 +72,9 @@ function RunningLogsListTable(props) {
                                                  // selected={props.selectedIndex===index}
                                                  marked={data.marked}
                                                  batchFailed={!!data.errorTime}
-                                                 itemClicked={() => props.logItemClicked(index)}
-                                                 itemShiftClicked = {() => props.logItemShiftClicked(index)}
-                                                 checkMarkClicked = {() => props.checkMarkClicked(index)}
+                                                 itemClicked={() => props.logItemClicked(data)}
+                                                 itemShiftClicked = {() => props.logItemShiftClicked(data)}
+                                                 checkMarkClicked = {() => props.checkMarkClicked(data)}
                             />
                         )}
                     </tbody>

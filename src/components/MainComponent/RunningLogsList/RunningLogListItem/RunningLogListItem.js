@@ -1,7 +1,8 @@
 import React, {useRef, useEffect, useState} from 'react';
 import styles from './RunningLogListItem.module.css';
-import FileContentPopup from "../../FileContentPopup/FileContentPopup";
-// import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import FileContentPopup from "../../../FileContentPopup/FileContentPopup";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faTrashAlt} from '@fortawesome/free-solid-svg-icons'
 
 function RunningLogsListItem(props) {
     const [showFileContentPopup, setShowFileContentPopup] = useState(false);
@@ -61,13 +62,9 @@ function RunningLogsListItem(props) {
     return (
         <>
             <tr className={style} onClick={itemClicked} ref={refElement}>
-                    <td>
-                        <h4 className={checkMarkStyle}>
-                            {/*✓*/}
-                            {/*<FontAwesomeIcon icon="trash" />*/}
-                            X
-                        </h4>
-                    </td>
+                <td className={checkMarkStyle}>
+                    <FontAwesomeIcon icon={faTrashAlt} />
+                </td>
                 <td>
                     {props.data.runningDate}
                 </td>

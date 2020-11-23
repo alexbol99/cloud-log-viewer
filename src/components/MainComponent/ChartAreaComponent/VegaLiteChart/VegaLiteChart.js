@@ -1,7 +1,7 @@
 import React from 'react';
 import { VegaLite } from 'react-vega'
 import styles from './VegaLiteChart.module.css';
-import {getChartData, getListData} from "../../../models/logData";
+import {getChartData, getListData} from "../../../../models/logData";
 
 function VegaLiteChart(props) {
     // Setup data before rendering
