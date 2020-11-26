@@ -14,14 +14,14 @@ function VegaLiteChart(props) {
     } catch (e) {
         chartData = null;
     }
-    runData = getListData(localData);
+    // runData = getListData(localData);
 
-    const client = runData.key.split('-')[0] || "unknown";
+    const client = localData.key.split('-')[0] || "unknown";
     const spec = {
         "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
         title: {
-            text: runData?.jobName,
-            subtitle: `Client: ${client} Running time: ${runData?.runningTime}`
+            text: localData?.jobName,
+            subtitle: `Client: ${client} Running time: ${localData?.runningTime}`
         },
         data: { values: chartData },
         mark: { type: "bar", tooltip: [] },
@@ -52,7 +52,7 @@ function VegaLiteChart(props) {
     return (
         <div className={styles.VegaLiteChart}>
             {
-                chartData && runData.runningTime ?
+                chartData && localData.runningTime ?
                     <VegaLite
                         spec={spec}
                         data={chartData}
@@ -62,7 +62,7 @@ function VegaLiteChart(props) {
                             compiled: false,
                             editor: false
                         }}
-                        downloadFileName={runData?.jobName}
+                        downloadFileName={localData?.jobName}
                         theme="urbaninstitute"
                     /> : null
             }

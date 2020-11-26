@@ -6,34 +6,35 @@ import {faTrashAlt} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 function RunningLogsListTable(props) {
-    useEffect( () => {
-        const handleKeyDown = (e) => {
-            switch (e.code) {
-                case "ArrowDown":
-                    e.stopPropagation();
-                    e.preventDefault();
-                    if (props.selectedIndex < props.logsListData.length-1) {
-                        props.logItemClicked(props.selectedIndex+1);
-                    }
-                    break;
-                case "ArrowUp":
-                    e.stopPropagation();
-                    e.preventDefault();
-                    if (props.selectedIndex > 0) {
-                        props.logItemClicked(props.selectedIndex-1);
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
 
-        document.addEventListener('keydown', handleKeyDown);
-
-        return () => {
-            document.removeEventListener('keydown', handleKeyDown);
-        };
-    })
+    // useEffect( () => {
+    //     const handleKeyDown = (e) => {
+    //         switch (e.code) {
+    //             case "ArrowDown":
+    //                 e.stopPropagation();
+    //                 e.preventDefault();
+    //                 if (props.selectedIndex < props.logDataArray.length-1) {
+    //                     props.logItemClicked(props.selectedIndex+1);
+    //                 }
+    //                 break;
+    //             case "ArrowUp":
+    //                 e.stopPropagation();
+    //                 e.preventDefault();
+    //                 if (props.selectedIndex > 0) {
+    //                     props.logItemClicked(props.selectedIndex-1);
+    //                 }
+    //                 break;
+    //             default:
+    //                 break;
+    //         }
+    //     }
+    //
+    //     document.addEventListener('keydown', handleKeyDown);
+    //
+    //     return () => {
+    //         document.removeEventListener('keydown', handleKeyDown);
+    //     };
+    // })
 
     const fetchMoreData = () => {
         // alert("Fetch more data")
@@ -43,7 +44,7 @@ function RunningLogsListTable(props) {
     return (
         <div>
             <InfiniteScroll
-                dataLength={props.logsListData?.length}
+                dataLength={props.logDataArray?.length}
                 next={fetchMoreData}
                 hasMore={true}
             >
@@ -66,12 +67,11 @@ function RunningLogsListTable(props) {
                     </tr>
                     </thead>
                     <tbody>
-                        {props.logsListData?.map( (data, index) =>
+                        {props.logDataArray?.map( (data, index) =>
                             <RunningLogsListItem key={index}
                                                  data={data}
                                                  // selected={props.selectedIndex===index}
                                                  marked={data.marked}
-                                                 batchFailed={!!data.errorTime}
                                                  itemClicked={() => props.logItemClicked(data)}
                                                  itemShiftClicked = {() => props.logItemShiftClicked(data)}
                                                  checkMarkClicked = {() => props.checkMarkClicked(data)}

@@ -6,11 +6,6 @@ import SearchInputComponent from "./SearchInputComponent/SearchInputComponent";
 import styles from './RunningLogsList.module.css';
 
 function RunningLogsList(props) {
-    // Setup data before rendering
-    let logsListData = [];
-    if (props.logDataArray.length > 0) {
-        logsListData = props.logDataArray.map(data => getListData(data))
-    }
     return (
         <div className={styles.RunningLogsList}>
             <RunningLogsListHeader
@@ -25,7 +20,7 @@ function RunningLogsList(props) {
             />
 
             <RunningLogsListTable
-                logsListData={logsListData}
+                logDataArray={props.logDataArray}
                 selectedIndex={props.selectedIndex}
                 logItemClicked={props.logItemClicked}
                 logItemShiftClicked={props.logItemShiftClicked}

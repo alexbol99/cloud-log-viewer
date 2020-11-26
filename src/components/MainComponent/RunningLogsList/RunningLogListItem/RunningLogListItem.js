@@ -53,11 +53,17 @@ function RunningLogsListItem(props) {
     }
 
     let style = props.data.selected ? styles.RunningLogListItemClicked : styles.RunningLogListItem;
-    style = props.batchFailed ? `${style} ${styles.RunningLogListItemFailed}` : style;
-    // let object_url = "https://s3.console.aws.amazon.com/s3/object/acp-cloud-logs/"+props.data.key;
+
+    const batchFailed= !!props.data.errorTime;
+    style = batchFailed ? `${style} ${styles.RunningLogListItemFailed}` : style;
 
     let checkMarkStyle = props.marked ?
         styles.RunningLogListItemCheckMarkClicked : styles.RunningLogListItemCheckMarkNotClicked;
+
+    const actionsNum = props.data?.batch[props.data.batch.length - 1].ActNum;
+    const layersNum = new Set(props.data?.batch.map(action => action.LayerName)).size;
+    const stepName = props.data?.batch[0].StepName;
+    const checklistName = props.data?.batch[0].ChecklistName;
 
     return (
         <>
@@ -72,16 +78,16 @@ function RunningLogsListItem(props) {
                     {props.data.jobName}
                 </td>
                 <td>
-                    {props.data.step}
+                    {stepName}
                 </td>
                 <td>
-                    {props.data.checklist}
+                    {checklistName}
                 </td>
                 <td className={styles.RunningLogListItemNumeric}>
-                    {props.data.actionsNum}
+                    {actionsNum}
                 </td>
                 <td className={styles.RunningLogListItemNumeric}>
-                    {props.data.layersNum}
+                    {layersNum}
                 </td>
                 <td className={styles.RunningLogListItemNumeric}>
                     {props.data.batchJobsNum}
@@ -93,9 +99,6 @@ function RunningLogsListItem(props) {
                     <div onClick={showLogFileContentPopup} >
                         {props.data.key}
                     </div>
-                    {/*<a href={object_url} target="_blank" rel="noopener noreferrer">*/}
-                    {/*    {props.data.key}*/}
-                    {/*</a>*/}
                 </td>
             </tr>
 

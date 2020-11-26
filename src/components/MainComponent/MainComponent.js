@@ -54,7 +54,8 @@ function MainComponent(props) {
             let localDataArray = new Array(filteredKeysList.length);
             let promises = filteredKeysList.map( (key, index) => fetchData(localDataArray, key, index));
             try {
-                let fetchedDataArray = await Promise.all(promises);
+                let res = await Promise.allSettled(promises);
+                let fetchedDataArray = res.filter(p => p.status === "fulfilled").map(p => p.value);
                 let newDataArray = logDataArray.concat(fetchedDataArray);
                 newDataArray.sort(function(a,b){
                     return new Date(b.runningDate) - new Date(a.runningDate);
@@ -91,6 +92,7 @@ function MainComponent(props) {
 
     // Callback to set new chart data and update selected index
     const logItemClicked = (clickedData) => {
+        if (!clickedData) return;
         let newLogDataArray = logDataArray.slice();
         let clickedIndex = newLogDataArray.findIndex( data => data.key === clickedData.key);
         newLogDataArray.forEach( (data, i) => {
@@ -101,6 +103,7 @@ function MainComponent(props) {
     }
 
     const logItemShiftClicked = (clickedData) => {
+        if (!clickedData) return;
         let newLogDataArray = logDataArray.slice();
         let clickedIndex = newLogDataArray.findIndex( data => data.key === clickedData.key);
         newLogDataArray.forEach( (data, i) =>
@@ -109,6 +112,7 @@ function MainComponent(props) {
     }
 
     const checkMarkClicked = (clickedData) => {
+        if (!clickedData) return;
         let newLogDataArray = logDataArray.slice();
         let clickedIndex = newLogDataArray.findIndex( data => data.key === clickedData.key);
         newLogDataArray.forEach( (data, i) =>

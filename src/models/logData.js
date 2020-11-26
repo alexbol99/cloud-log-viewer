@@ -26,7 +26,8 @@ export function getChartData(data) {
         Name: "Upload",
         Index: -1,
         StartDate: data.uploadTime.StartTime,
-        EndDate: data.uploadTime.CompleteTime
+        EndDate: data.uploadTime.CompleteTime,
+        Time: time_diff(data.uploadTime.StartTime, data.uploadTime.CompleteTime)
     };
 
     let splitterObj = {
@@ -34,7 +35,8 @@ export function getChartData(data) {
         Name: "Splitter",
         Index: 0,
         StartDate: data.splitterTime.StartTime,
-        EndDate: data.splitterTime.CompleteTime
+        EndDate: data.splitterTime.CompleteTime,
+        Time: time_diff(data.splitterTime.StartTime, data.splitterTime.CompleteTime)
     };
 
     let mergerObj;
@@ -44,7 +46,8 @@ export function getChartData(data) {
             Name: "Merger",
             Index: stats.length + 1,
             StartDate: data.mergerTime.StartTime,
-            EndDate: data.mergerTime.CompleteTime
+            EndDate: data.mergerTime.CompleteTime,
+            Time: time_diff(data.mergerTime.StartTime, data.mergerTime.CompleteTime)
         };
     }
 
@@ -55,7 +58,8 @@ export function getChartData(data) {
             Name: "Download",
             Index: stats.length + 2,
             StartDate: data.downloadTime.StartTime,
-            EndDate: data.downloadTime.CompleteTime
+            EndDate: data.downloadTime.CompleteTime,
+            Time: time_diff(data.downloadTime.StartTime, data.downloadTime.CompleteTime)
         };
     }
 
@@ -66,26 +70,25 @@ export function getChartData(data) {
     return stats;
 }
 
-
-export function getListData(localData) {
-    const actionsNum = localData?.batch[localData.batch.length - 1].ActNum;
-    const layersNum = new Set(localData?.batch.map(action => action.LayerName)).size;
-    return {
-        runningDate: localData?.runningDate,
-        jobName: localData?.jobName,
-        step: localData?.batch[0].StepName,
-        checklist: localData?.batch[0].ChecklistName,
-        actionsNum: actionsNum,
-        layersNum: layersNum,
-        runningTime: localData?.runningTime,
-        batchJobsNum: localData?.batch.length,
-        key: localData?.key,
-        errorTime: localData?.errorTime,
-        text: localData?.text,
-        marked: localData?.marked,
-        selected: localData?.selected
-    }
-}
+// export function getListData(localData) {
+//     const actionsNum = localData?.batch[localData.batch.length - 1].ActNum;
+//     const layersNum = new Set(localData?.batch.map(action => action.LayerName)).size;
+//     return {
+//         runningDate: localData?.runningDate,
+//         jobName: localData?.jobName,
+//         step: localData?.batch[0].StepName,
+//         checklist: localData?.batch[0].ChecklistName,
+//         actionsNum: actionsNum,
+//         layersNum: layersNum,
+//         runningTime: localData?.runningTime,
+//         batchJobsNum: localData?.batch.length,
+//         key: localData?.key,
+//         errorTime: localData?.errorTime,
+//         text: localData?.text,
+//         marked: localData?.marked,
+//         selected: localData?.selected
+//     }
+// }
 
 // function time_diff(start_time, complete_time) {
 //     let start = start_time.split(':').map(t => Number(t));
