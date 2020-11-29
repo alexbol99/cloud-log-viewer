@@ -64,6 +64,7 @@ function RunningLogsListItem(props) {
     const layersNum = new Set(props.data?.batch.map(action => action.LayerName)).size;
     const stepName = props.data?.batch[0].StepName;
     const checklistName = props.data?.batch[0].ChecklistName;
+    const batchJobsNum = props.data?.batch.length;
 
     return (
         <>
@@ -90,7 +91,7 @@ function RunningLogsListItem(props) {
                     {layersNum}
                 </td>
                 <td className={styles.RunningLogListItemNumeric}>
-                    {props.data.batchJobsNum}
+                    {batchJobsNum}
                 </td>
                 <td>
                     {props.data.runningTime || "Failed"}
