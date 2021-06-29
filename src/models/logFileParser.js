@@ -5,7 +5,7 @@ export function parse(text) {
     return {
         runningDate: runningDate(arrayOfTimestamps),
         runningTime: runningTime(arrayOfTimestamps, errorTimeString),
-        jobName: jobName(row_lines),
+        jobName: jobName(text),
         batch: batch(arrayOfTimestamps),
         uploadTime: uploadTime(arrayOfTimestamps),
         splitterTime: splitterTime(arrayOfTimestamps),
@@ -16,9 +16,21 @@ export function parse(text) {
     };
 }
 
-function jobName(row_lines) {
+function jobName(text) {
+    const row_lines = text.split('\n');
     const job_line = row_lines.filter(line => line.match("Job:"))[0];
-    const job_name = job_line.split(' ')[1];
+    let job_name;
+
+    if (job_line) {
+        job_name = job_line.split(' ')[1];
+    }
+    else {
+        let ext_name = row_lines
+            .filter((line) => line.match("JobInfo:"))[0]
+            .split(" ")[1]
+            .split("=")[1];
+        job_name = ext_name.slice(6, ext_name.indexOf(".acp_ex"));
+    }
     return job_name;
 }
 

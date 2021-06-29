@@ -1,7 +1,8 @@
 export function getChartData(data) {
     let stats = data.batch.map(action => {
         let timestamp = data.acpTime.find(
-            a => a.Stage === action.Stage && a.Index === action.StageIndex
+            a => (a.Stage === action.Stage || a.Stage === "") &&
+                a.Index === action.StageIndex
         );
         return {
             Object: timestamp.Succeed ? "Acp" : "Acp Failed",

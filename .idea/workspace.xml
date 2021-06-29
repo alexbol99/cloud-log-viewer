@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="eb5666f8-fa31-4b81-a449-ca177696146b" name="Default Changelist" comment="">
+    <list default="true" id="eb5666f8-fa31-4b81-a449-ca177696146b" name="Default Changelist" comment="- refactoring: remove getListData() and logListData&#10;- RunningLogsListTable: rely on native behavior of arrow keys in table&#10;- await for Promise.allSettled and do not break app on erroneous file format, filter &quot;fulfilled&quot; promises&#10;- add time to Upload, Download, Splitter, Merger in chart">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/MainComponent/RunningLogsList/RunningLogListItem/RunningLogListItem.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MainComponent/RunningLogsList/RunningLogListItem/RunningLogListItem.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/MainComponent/RunningLogsList/RunningLogListItem/RunningLogListItem.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MainComponent/RunningLogsList/RunningLogListItem/RunningLogListItem.module.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/MainComponent/RunningLogsList/RunningLogsListTable/RunningLogsListTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MainComponent/RunningLogsList/RunningLogsListTable/RunningLogsListTable.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/logData.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/logData.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/logFileParser.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/logFileParser.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,12 +60,12 @@
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/models" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/components/MainComponent" />
       <recent name="$PROJECT_DIR$/src/components/ChartAreaComponent" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/models" />
     </key>
   </component>
   <component name="RunManager" selected="npm.deploy">
@@ -97,8 +101,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="npm.deploy" />
         <item itemvalue="npm.start" />
+        <item itemvalue="npm.deploy" />
         <item itemvalue="npm.build" />
       </list>
     </recent_temporary>
@@ -132,6 +136,8 @@
       <workItem from="1604664716675" duration="6195000" />
       <workItem from="1604731431589" duration="17650000" />
       <workItem from="1605451168647" duration="56830000" />
+      <workItem from="1624883241420" duration="8374000" />
+      <workItem from="1624949565703" duration="920000" />
     </task>
     <task id="LOCAL-00001" summary="- chart remove fixed height">
       <created>1593938043163</created>
@@ -333,80 +339,5 @@
     <MESSAGE value="- better styling" />
     <MESSAGE value="- refactoring: remove getListData() and logListData&#10;- RunningLogsListTable: rely on native behavior of arrow keys in table&#10;- await for Promise.allSettled and do not break app on erroneous file format, filter &quot;fulfilled&quot; promises&#10;- add time to Upload, Download, Splitter, Merger in chart" />
     <option name="LAST_COMMIT_MESSAGE" value="- refactoring: remove getListData() and logListData&#10;- RunningLogsListTable: rely on native behavior of arrow keys in table&#10;- await for Promise.allSettled and do not break app on erroneous file format, filter &quot;fulfilled&quot; promises&#10;- add time to Upload, Download, Splitter, Merger in chart" />
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="410" y="214" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1605269450743">
-      <screen x="0" y="23" width="1280" height="728" />
-    </state>
-    <state x="410" y="214" key="#com.intellij.fileTypes.FileTypeChooser/0.23.1280.728@0.23.1280.728" timestamp="1605269450743" />
-    <state x="310" y="42" width="863" height="676" key="CommitChangelistDialog2" timestamp="1606412658832">
-      <screen x="0" y="23" width="1280" height="730" />
-    </state>
-    <state x="765" y="47" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1603654520259" />
-    <state x="416" y="23" key="CommitChangelistDialog2/0.23.1280.728@0.23.1280.728" timestamp="1605562790452" />
-    <state x="0" y="23" key="CommitChangelistDialog2/0.23.1280.729@0.23.1280.729" timestamp="1606138827537" />
-    <state x="310" y="42" width="863" height="676" key="CommitChangelistDialog2/0.23.1280.730@0.23.1280.730" timestamp="1606412658832" />
-    <state x="416" y="23" key="CommitChangelistDialog2/0.23.1280.732@0.23.1280.732" timestamp="1604678363485" />
-    <state x="434" y="56" width="846" height="633" key="CommitChangelistDialog2/0.23.1280.737@0.23.1280.737" timestamp="1604416232847" />
-    <state x="617" y="4" width="1106" height="892" key="CommitChangelistDialog2/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1597591837838" />
-    <state x="2537" y="0" key="CommitChangelistDialog2/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1597737093596" />
-    <state width="1179" height="185" key="GridCell.Tab.0.bottom" timestamp="1606413377456">
-      <screen x="0" y="23" width="1280" height="732" />
-    </state>
-    <state width="1405" height="227" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1603656530760" />
-    <state width="1179" height="134" key="GridCell.Tab.0.bottom/0.23.1280.728@0.23.1280.728" timestamp="1605608861487" />
-    <state width="1179" height="185" key="GridCell.Tab.0.bottom/0.23.1280.729@0.23.1280.729" timestamp="1606413063307" />
-    <state width="1179" height="117" key="GridCell.Tab.0.bottom/0.23.1280.730@0.23.1280.730" timestamp="1606412676612" />
-    <state width="1179" height="185" key="GridCell.Tab.0.bottom/0.23.1280.732@0.23.1280.732" timestamp="1606413377456" />
-    <state width="1127" height="153" key="GridCell.Tab.0.bottom/0.23.1280.733@0.23.1280.733" timestamp="1604388126020" />
-    <state width="1657" height="178" key="GridCell.Tab.0.bottom/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1599745431752" />
-    <state width="1657" height="175" key="GridCell.Tab.0.bottom/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1597839679986" />
-    <state width="1179" height="185" key="GridCell.Tab.0.center" timestamp="1606413377455">
-      <screen x="0" y="23" width="1280" height="732" />
-    </state>
-    <state width="1405" height="227" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1603656530760" />
-    <state width="1179" height="134" key="GridCell.Tab.0.center/0.23.1280.728@0.23.1280.728" timestamp="1605608861486" />
-    <state width="1179" height="185" key="GridCell.Tab.0.center/0.23.1280.729@0.23.1280.729" timestamp="1606413063306" />
-    <state width="1179" height="117" key="GridCell.Tab.0.center/0.23.1280.730@0.23.1280.730" timestamp="1606412676611" />
-    <state width="1179" height="185" key="GridCell.Tab.0.center/0.23.1280.732@0.23.1280.732" timestamp="1606413377455" />
-    <state width="1127" height="153" key="GridCell.Tab.0.center/0.23.1280.733@0.23.1280.733" timestamp="1604388126018" />
-    <state width="1657" height="178" key="GridCell.Tab.0.center/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1599745431752" />
-    <state width="1657" height="175" key="GridCell.Tab.0.center/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1597839679986" />
-    <state width="1179" height="185" key="GridCell.Tab.0.left" timestamp="1606413377454">
-      <screen x="0" y="23" width="1280" height="732" />
-    </state>
-    <state width="1405" height="227" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1603656530760" />
-    <state width="1179" height="134" key="GridCell.Tab.0.left/0.23.1280.728@0.23.1280.728" timestamp="1605608861486" />
-    <state width="1179" height="185" key="GridCell.Tab.0.left/0.23.1280.729@0.23.1280.729" timestamp="1606413063306" />
-    <state width="1179" height="117" key="GridCell.Tab.0.left/0.23.1280.730@0.23.1280.730" timestamp="1606412676610" />
-    <state width="1179" height="185" key="GridCell.Tab.0.left/0.23.1280.732@0.23.1280.732" timestamp="1606413377454" />
-    <state width="1127" height="153" key="GridCell.Tab.0.left/0.23.1280.733@0.23.1280.733" timestamp="1604388126017" />
-    <state width="1657" height="178" key="GridCell.Tab.0.left/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1599745431752" />
-    <state width="1657" height="175" key="GridCell.Tab.0.left/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1597839679986" />
-    <state width="1179" height="185" key="GridCell.Tab.0.right" timestamp="1606413377455">
-      <screen x="0" y="23" width="1280" height="732" />
-    </state>
-    <state width="1405" height="227" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1603656530760" />
-    <state width="1179" height="134" key="GridCell.Tab.0.right/0.23.1280.728@0.23.1280.728" timestamp="1605608861487" />
-    <state width="1179" height="185" key="GridCell.Tab.0.right/0.23.1280.729@0.23.1280.729" timestamp="1606413063307" />
-    <state width="1179" height="117" key="GridCell.Tab.0.right/0.23.1280.730@0.23.1280.730" timestamp="1606412676611" />
-    <state width="1179" height="185" key="GridCell.Tab.0.right/0.23.1280.732@0.23.1280.732" timestamp="1606413377455" />
-    <state width="1127" height="153" key="GridCell.Tab.0.right/0.23.1280.733@0.23.1280.733" timestamp="1604388126019" />
-    <state width="1657" height="178" key="GridCell.Tab.0.right/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1599745431752" />
-    <state width="1657" height="175" key="GridCell.Tab.0.right/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1597839679986" />
-    <state x="389" y="204" key="Vcs.Push.Dialog.v2" timestamp="1606412661249">
-      <screen x="0" y="23" width="1280" height="730" />
-    </state>
-    <state x="583" y="258" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1603905578154" />
-    <state x="389" y="204" key="Vcs.Push.Dialog.v2/0.23.1280.728@0.23.1280.728" timestamp="1605562792626" />
-    <state x="389" y="204" key="Vcs.Push.Dialog.v2/0.23.1280.729@0.23.1280.729" timestamp="1606138830637" />
-    <state x="389" y="204" key="Vcs.Push.Dialog.v2/0.23.1280.730@0.23.1280.730" timestamp="1606412661249" />
-    <state x="389" y="206" key="Vcs.Push.Dialog.v2/0.23.1280.737@0.23.1280.737" timestamp="1604416239740" />
-    <state x="583" y="258" key="Vcs.Push.Dialog.v2/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1597591842264" />
-    <state x="2503" y="258" key="Vcs.Push.Dialog.v2/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1597737095803" />
-    <state x="772" y="421" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1599745146122">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="772" y="421" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1599745146122" />
   </component>
 </project>
