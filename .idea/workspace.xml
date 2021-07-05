@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="eb5666f8-fa31-4b81-a449-ca177696146b" name="Default Changelist" comment="- refactoring: remove getListData() and logListData&#10;- RunningLogsListTable: rely on native behavior of arrow keys in table&#10;- await for Promise.allSettled and do not break app on erroneous file format, filter &quot;fulfilled&quot; promises&#10;- add time to Upload, Download, Splitter, Merger in chart">
+    <list default="true" id="eb5666f8-fa31-4b81-a449-ca177696146b" name="Default Changelist" comment="- adjust parsing to support latest changes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/MainComponent/RunningLogsList/RunningLogListItem/RunningLogListItem.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MainComponent/RunningLogsList/RunningLogListItem/RunningLogListItem.module.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/MainComponent/ChartAreaComponent/VegaLiteChart/VegaLiteChart.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MainComponent/ChartAreaComponent/VegaLiteChart/VegaLiteChart.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/MainComponent/RunningLogsList/RunningLogsList.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MainComponent/RunningLogsList/RunningLogsList.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/MainComponent/RunningLogsList/RunningLogsListTable/RunningLogsListTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MainComponent/RunningLogsList/RunningLogsListTable/RunningLogsListTable.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/logData.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/logData.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/logFileParser.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/logFileParser.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,12 +24,6 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-  </component>
-  <component name="JsFlowSettings">
-    <service-enabled>true</service-enabled>
-    <exe-path />
-    <other-services-enabled>true</other-services-enabled>
-    <auto-save>true</auto-save>
   </component>
   <component name="ProjectId" id="1eFwVDHQ5jW4axxkSb4Vk8RFHB8" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -68,7 +61,7 @@
       <recent name="$PROJECT_DIR$/src/components/ChartAreaComponent" />
     </key>
   </component>
-  <component name="RunManager" selected="npm.deploy">
+  <component name="RunManager" selected="npm.start">
     <configuration name="build" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
       <package-json value="$PROJECT_DIR$/package.json" />
       <command value="run" />
@@ -137,7 +130,9 @@
       <workItem from="1604731431589" duration="17650000" />
       <workItem from="1605451168647" duration="56830000" />
       <workItem from="1624883241420" duration="8374000" />
-      <workItem from="1624949565703" duration="920000" />
+      <workItem from="1624949565703" duration="8705000" />
+      <workItem from="1625490571300" duration="80000" />
+      <workItem from="1625490716330" duration="2321000" />
     </task>
     <task id="LOCAL-00001" summary="- chart remove fixed height">
       <created>1593938043163</created>
@@ -307,11 +302,30 @@
       <option name="project" value="LOCAL" />
       <updated>1606412659092</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="- adjust parsing to support latest changes">
+      <created>1624952339219</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1624952339219</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="- chart remove fixed height" />
@@ -338,6 +352,11 @@
     <MESSAGE value="- added search by filename (SearchInputComponent)&#10;- set icons&#10;- moved to custom domain www.cloudlogviewer.com" />
     <MESSAGE value="- better styling" />
     <MESSAGE value="- refactoring: remove getListData() and logListData&#10;- RunningLogsListTable: rely on native behavior of arrow keys in table&#10;- await for Promise.allSettled and do not break app on erroneous file format, filter &quot;fulfilled&quot; promises&#10;- add time to Upload, Download, Splitter, Merger in chart" />
-    <option name="LAST_COMMIT_MESSAGE" value="- refactoring: remove getListData() and logListData&#10;- RunningLogsListTable: rely on native behavior of arrow keys in table&#10;- await for Promise.allSettled and do not break app on erroneous file format, filter &quot;fulfilled&quot; promises&#10;- add time to Upload, Download, Splitter, Merger in chart" />
+    <MESSAGE value="- adjust parsing to support latest changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="- adjust parsing to support latest changes" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

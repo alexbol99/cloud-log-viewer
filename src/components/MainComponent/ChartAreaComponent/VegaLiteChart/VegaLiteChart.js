@@ -1,12 +1,12 @@
 import React from 'react';
-import { VegaLite } from 'react-vega'
+import { Vega/*, VegaLite*/ } from 'react-vega'
 import styles from './VegaLiteChart.module.css';
-import {getChartData, getListData} from "../../../../models/logData";
+import {getChartData} from "../../../../models/logData";
 
 function VegaLiteChart(props) {
     // Setup data before rendering
     let chartData = null;
-    let runData = null;
+    // let runData = null;
 
     let localData = props.logData;
     try {
@@ -24,7 +24,7 @@ function VegaLiteChart(props) {
             subtitle: `Client: ${client} Running time: ${localData?.runningTime}`
         },
         data: { values: chartData },
-        mark: { type: "bar", tooltip: [] },
+        mark: { type: "bar"/*, tooltip: []*/ },
         encoding: {
             x: {
                 type: "temporal",
@@ -53,7 +53,7 @@ function VegaLiteChart(props) {
         <div className={styles.VegaLiteChart}>
             {
                 chartData && localData.runningTime ?
-                    <VegaLite
+                    <Vega
                         spec={spec}
                         data={chartData}
                         actions={{

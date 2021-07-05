@@ -1,7 +1,6 @@
 import React from 'react';
 import RunningLogsListHeader from "./RunningLogsListHeader/RunningLogsListHeader";
 import RunningLogsListTable from "./RunningLogsListTable/RunningLogsListTable";
-import {getListData} from "../../../models/logData";
 import SearchInputComponent from "./SearchInputComponent/SearchInputComponent";
 import styles from './RunningLogsList.module.css';
 
