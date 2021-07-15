@@ -1,9 +1,11 @@
-import React from 'react';
 import { Vega/*, VegaLite*/ } from 'react-vega'
 import styles from './VegaLiteChart.module.css';
 import {getChartData} from "../../../../models/logData";
+import {useRef} from "react";
 
 function VegaLiteChart(props) {
+    const vegaChartRef = useRef(null);
+
     // Setup data before rendering
     let chartData = null;
     // let runData = null;
@@ -55,6 +57,7 @@ function VegaLiteChart(props) {
                 chartData && localData.runningTime ?
                     <Vega
                         spec={spec}
+                        ref={vegaChartRef}
                         data={chartData}
                         actions={{
                             export: true,

@@ -1,4 +1,3 @@
-import React/*, {useEffect}*/ from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import styles from './RunningLogsListTable.module.css';
 import RunningLogsListItem from "../RunningLogListItem/RunningLogListItem";

@@ -1,4 +1,3 @@
-import React from 'react';
 import RunningLogsListHeader from "./RunningLogsListHeader/RunningLogsListHeader";
 import RunningLogsListTable from "./RunningLogsListTable/RunningLogsListTable";
 import SearchInputComponent from "./SearchInputComponent/SearchInputComponent";

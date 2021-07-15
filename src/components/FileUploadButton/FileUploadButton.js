@@ -1,4 +1,3 @@
-import React from "react";
 import Files from "react-butterfiles";
 // import readFiles from "../../models/readFile";
 // import styles from "./FileUploadButton.module.css";

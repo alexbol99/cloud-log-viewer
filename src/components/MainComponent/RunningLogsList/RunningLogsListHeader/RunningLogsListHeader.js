@@ -1,4 +1,3 @@
-import React from 'react';
 import Button from '../../../../UI/Button/Button';
 import { faSyncAlt } from '@fortawesome/free-solid-svg-icons'
 import FileUploadButton from "../../../FileUploadButton/FileUploadButton";

@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import styles from "./ChartAreaComponent.module.css";
 import VegaLiteChart from "./VegaLiteChart/VegaLiteChart";
 

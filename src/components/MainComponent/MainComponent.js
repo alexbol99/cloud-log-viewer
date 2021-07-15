@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import styles from './MainComponent.module.css';
 import RunningLogsList from "./RunningLogsList/RunningLogsList";
 import ChartAreaComponent from "./ChartAreaComponent/ChartAreaComponent";
