@@ -9,85 +9,146 @@ function MainComponent(props) {
     const [logDataArray, setLogDataArray] = useState([]);
     const [loading, setLoading] = useState(false);
     const [searchJobNamePattern, setSearchJobNamePattern] = useState("");
+    const [keysListToFetch, setKeysListToFetch] = useState([]);
+    const [needToFetch, setNeedToFetch] = useState(true);
 
-    // const numInChunk = 8;
-
-    // Fetch content of files from s3 bucket by given list of keys
-    // const fetchDataByKeysList = async (keysList) => {
-    //     let textArray = await fetchFileContentByKeysList(keysList);
-    //     let dataArray = textArray.map( e => parse(e.text));
-    //     dataArray.forEach( (data,i) => data.key = keysList[i] )
-    //     dataArray.forEach( (data,i) => data.text = textArray[i].text )
-    //     return dataArray;
+    // const fetchData = async (localDataArray, key, index) => {
+    //     return new Promise( async (resolve, reject) => {
+    //         try {
+    //             let text = await fetchFileContent(key);
+    //             let data = parse(text.text);
+    //             data.key = key;
+    //             data.text = text.text;
+    //             data.marked = false;
+    //             data.selected = false;
+    //
+    //             localDataArray[index] = data;
+    //             let newDataArray = logDataArray.concat(localDataArray);
+    //             newDataArray.filter (data => data !== undefined)
+    //             setLogDataArray(newDataArray);             // trigger rendering
+    //             resolve(data);
+    //         }
+    //         catch (err) {
+    //             reject(err.message)
+    //         }
+    //     })
     // }
 
-    // Fetch content of one file from s3 bucket by given key
-    const fetchData = async (localDataArray, key, index) => {
-        return new Promise( async (resolve, reject) => {
-            try {
-                let text = await fetchFileContent(key);
-                let data = parse(text.text);
-                data.key = key;
-                data.text = text.text;
-                data.marked = false;
-                data.selected = false;
+    useEffect( async() => {
+        let localDataArray = [];
+        let newDataArray = [];
 
-                localDataArray[index] = data;
-                let newDataArray = logDataArray.concat(localDataArray);
-                newDataArray.filter (data => data !== undefined)
-                setLogDataArray(newDataArray);             // trigger rendering
-                resolve(data);
-            }
-            catch (err) {
-                reject(err.message)
-            }
-        })
-    }
-
-    const fetchMoreData = async (keysListToFetch) => {
-        setLoading(true);
-
-        let keysList = keysListToFetch || await fetchKeysList();
-        let filteredKeysList = filterNewKeysList(keysList);
-        // let chunkOfKeysList = filteredKeysList.slice(0,numInChunk);
-        if (filteredKeysList.length > 0) {
-            let localDataArray = new Array(filteredKeysList.length);
-            let promises = filteredKeysList.map( (key, index) => fetchData(localDataArray, key, index));
-            try {
-                let res = await Promise.allSettled(promises);
-                let fetchedDataArray = res.filter(p => p.status === "fulfilled").map(p => p.value);
-                let newDataArray = logDataArray.concat(fetchedDataArray);
-                newDataArray.sort(function(a,b){
-                    return new Date(b.runningDate) - new Date(a.runningDate);
-                });
-                if (!newDataArray.some(data => data.marked)) {
-                    newDataArray[0].marked = true;
-                }
-                if (!newDataArray.some(data => data.selected)) {
-                    newDataArray[0].selected = true;
-                }
-                setLogDataArray(newDataArray);             // trigger rendering
-            } catch (err) {
-                console.log(err.message)
-            }
+        // Filter keysList: keep only new keys that do not exist in logDataArray
+        const filterNewKeysList = (keysList) => {
+            let filteredKeyList = keysList
+                .filter( key => !logDataArray.some( data => data.key === key))
+            return filteredKeyList;
         }
 
-        setLoading(false);
-    }
+        // Fetch content of one file from s3 bucket by given key
+        const fetchData = async (localDataArray, key, index) => {
+            return new Promise( async (resolve, reject) => {
+                try {
+                    let text = await fetchFileContent(key);
+                    let data = parse(text.text);
+                    data.key = key;
+                    data.text = text.text;
+                    data.marked = false;
+                    data.selected = false;
 
-    // Filter keysList: keep only new keys that do not exist in logDataArray
-    const filterNewKeysList = (keysList) => {
-        let filteredKeyList = keysList
-            .filter( key => !logDataArray.some( data => data.key === key))
-        return filteredKeyList;
-    }
+                    localDataArray[index] = data;
+                    let newDataArray = logDataArray.concat(localDataArray);
+                    newDataArray.filter (data => data !== undefined)
+                    // setLogDataArray(newDataArray);             // trigger rendering
+                    resolve(data);
+                }
+                catch (err) {
+                    reject(err.message)
+                }
+            })
+        }
+
+        const fetchMoreData = async (keysListToFetch) => {
+            let keysList = keysListToFetch.length > 0 ? keysListToFetch : await fetchKeysList();
+            let filteredKeysList = filterNewKeysList(keysList);
+
+            // let chunkOfKeysList = filteredKeysList.slice(0,numInChunk);
+            if (filteredKeysList.length > 0) {
+                localDataArray = new Array(filteredKeysList.length);
+                let promises = filteredKeysList.map( (key, index) => fetchData(localDataArray, key, index));
+                try {
+                    let res = await Promise.allSettled(promises);
+                    let fetchedDataArray = res.filter(p => p.status === "fulfilled").map(p => p.value);
+                    newDataArray = logDataArray.concat(fetchedDataArray);
+                    newDataArray.sort(function(a,b){
+                        return new Date(b.runningDate) - new Date(a.runningDate);
+                    });
+                    if (!newDataArray.some(data => data.marked)) {
+                        newDataArray[0].marked = true;
+                    }
+                    if (!newDataArray.some(data => data.selected)) {
+                        newDataArray[0].selected = true;
+                    }
+
+                } catch (err) {
+                    console.log(err.message)
+                }
+            }
+            return newDataArray;
+        }
+
+        if (needToFetch) {
+            setLoading(true);
+            let newDataArray = await fetchMoreData(keysListToFetch);
+            setNeedToFetch(false);                // stop racing condition
+            setLogDataArray(newDataArray);              // trigger rendering
+            setLoading(false);                    // stop loader
+            setKeysListToFetch([]);               // clean
+        }
+
+    },[keysListToFetch, needToFetch, logDataArray]);
+
+    // const fetchMoreData = async (keysListToFetch) => {
+    //     setLoading(true);
+    //
+    //     let keysList = keysListToFetch || await fetchKeysList();
+    //     let filteredKeysList = filterNewKeysList(keysList);
+    //     // let chunkOfKeysList = filteredKeysList.slice(0,numInChunk);
+    //     if (filteredKeysList.length > 0) {
+    //         let localDataArray = new Array(filteredKeysList.length);
+    //         let promises = filteredKeysList.map( (key, index) => fetchData(localDataArray, key, index));
+    //         try {
+    //             let res = await Promise.allSettled(promises);
+    //             let fetchedDataArray = res.filter(p => p.status === "fulfilled").map(p => p.value);
+    //             let newDataArray = logDataArray.concat(fetchedDataArray);
+    //             newDataArray.sort(function(a,b){
+    //                 return new Date(b.runningDate) - new Date(a.runningDate);
+    //             });
+    //             if (!newDataArray.some(data => data.marked)) {
+    //                 newDataArray[0].marked = true;
+    //             }
+    //             if (!newDataArray.some(data => data.selected)) {
+    //                 newDataArray[0].selected = true;
+    //             }
+    //             setLogDataArray(newDataArray);             // trigger rendering
+    //         } catch (err) {
+    //             console.log(err.message)
+    //         }
+    //     }
+    //
+    //     setLoading(false);
+    // }
+
 
     const syncData = () => {
-        fetchMoreData()
+        // fetchMoreData()
+        setNeedToFetch(true);
     }
 
     const fetchUploaded = (keysList) => {
-        fetchMoreData(keysList)
+        setKeysListToFetch(keysList);
+        setNeedToFetch(true);
+        // fetchMoreData(keysList)
     }
 
     // Callback to set new chart data and update selected index
@@ -144,9 +205,10 @@ function MainComponent(props) {
     }
 
     // Effect to load all data from AWS s3 bucket after component mounted
-    useEffect( () => {
-        fetchMoreData();
-    },[]);
+    // useEffect( async() => {
+    //     fetchMoreData();
+    //
+    // },[]);
 
     return (
         <main className={styles.MainComponent}>

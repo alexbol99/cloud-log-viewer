@@ -66,7 +66,7 @@ function VegaLiteChart(props) {
                             editor: false
                         }}
                         downloadFileName={localData?.jobName}
-                        theme="urbaninstitute"
+                        theme="fivethirtyeight"
                     /> : null
             }
         </div>

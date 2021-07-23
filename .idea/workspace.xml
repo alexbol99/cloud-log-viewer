@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="eb5666f8-fa31-4b81-a449-ca177696146b" name="Default Changelist" comment="- remove React in scope for all components">
+    <list default="true" id="eb5666f8-fa31-4b81-a449-ca177696146b" name="Default Changelist" comment="- add parsing and displaying workers">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/MainComponent/ChartAreaComponent/VegaLiteChart/VegaLiteChart.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MainComponent/ChartAreaComponent/VegaLiteChart/VegaLiteChart.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/logData.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/logData.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/logFileParser.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/logFileParser.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/MainComponent/MainComponent.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MainComponent/MainComponent.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -92,9 +91,9 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="npm.build" />
         <item itemvalue="npm.start" />
         <item itemvalue="npm.deploy" />
+        <item itemvalue="npm.build" />
       </list>
     </recent_temporary>
   </component>
@@ -131,7 +130,7 @@
       <workItem from="1624949565703" duration="8705000" />
       <workItem from="1625490571300" duration="80000" />
       <workItem from="1625490716330" duration="13142000" />
-      <workItem from="1626859657829" duration="8166000" />
+      <workItem from="1626859657829" duration="18328000" />
     </task>
     <task id="LOCAL-00001" summary="- chart remove fixed height">
       <created>1593938043163</created>
@@ -322,7 +321,14 @@
       <option name="project" value="LOCAL" />
       <updated>1626362325790</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="- add parsing and displaying workers">
+      <created>1627030175832</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1627030175833</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -341,7 +347,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="- change parser to reflect Ronny's changes in log messages" />
     <MESSAGE value="- change title&#10;- add refresh icon and logic (use free awasome-icons)" />
     <MESSAGE value="- added BeginNf and EndNf" />
     <MESSAGE value="- try not to crash on log with errors and pings" />
@@ -366,7 +371,8 @@
     <MESSAGE value="- adjust parsing to support latest changes" />
     <MESSAGE value="- update to react 17.0.2&#10;- remove warnings" />
     <MESSAGE value="- remove React in scope for all components" />
-    <option name="LAST_COMMIT_MESSAGE" value="- remove React in scope for all components" />
+    <MESSAGE value="- add parsing and displaying workers" />
+    <option name="LAST_COMMIT_MESSAGE" value="- add parsing and displaying workers" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
