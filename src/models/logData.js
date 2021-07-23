@@ -1,70 +1,98 @@
 export function getChartData(data) {
-    let stats = data.batch.map(action => {
-        let timestamp = data.acpTime.find(
-            a => (a.Stage === action.Stage || a.Stage === "") &&
-                a.Index === action.StageIndex
-        );
+    let index = 0;
+
+    let uploadObj = {
+        Object: "Upload",
+        Name: "Upload",
+        Index: index,
+        StartDate: data.uploadTime.StartTime,
+        EndDate: data.uploadTime.CompleteTime,
+        Time: time_diff(data.uploadTime.StartTime, data.uploadTime.CompleteTime)
+    };
+
+    index += 1;
+
+    let splitterObj = {
+        Object: "Splitter",
+        Name: "Splitter",
+        Index: index,
+        StartDate: data.splitterTime.StartTime,
+        EndDate: data.splitterTime.CompleteTime,
+        Time: time_diff(data.splitterTime.StartTime, data.splitterTime.CompleteTime)
+    };
+
+    // index += 1;
+
+    // let stats = data.batch.map(action => {
+    //     let timestamp = data.acpTime.find(
+    //         a => (a.Stage === action.Stage || a.Stage === "") &&
+    //             a.Index === action.StageIndex
+    //     );
+    //     return {
+    //         Object: timestamp.Succeed ? "Acp" : "Acp Failed",
+    //         Stage: action.Stage,
+    //         Index: action.Stage + '_' + action.StageIndex,
+    //         ActNum: action.ActNum,
+    //         Name: action.AnalysisName,
+    //         Layer: action.LayerName,
+    //         ActParam: action.ActParam,
+    //         BeginNf: action.BeginNf,
+    //         EndNf: action.EndNf,
+    //         ContourGroupId: action.ContourGroupId,
+    //         ContourGroupNum: action.ContourGroupNum,
+    //         StartDate: timestamp ? timestamp.StartTime : "",
+    //         EndDate: timestamp ? timestamp.CompleteTime : "",
+    //         Time: time_diff(timestamp.StartTime, timestamp.CompleteTime)
+    //     };
+    // });
+
+    let acpArray = data.acpTime.map((timestamp) => {
+        let objectName =
+            timestamp.WorkerCmd === "NULL" ? "ACP Master" : "ACP Worker";
+        objectName = timestamp.Succeed ? objectName : `${objectName} Failed`;
+        index += 1; //timestamp.BatchId === 1 ? timestamp.Index : timestamp.Index + 1;
+        let jobInBatch = data.batch.find((job) => job.Id === timestamp.BatchId);
         return {
-            Object: timestamp.Succeed ? "Acp" : "Acp Failed",
-            Stage: action.Stage,
-            Index: action.Stage + '_' + action.StageIndex,
-            ActNum: action.ActNum,
-            Name: action.AnalysisName,
-            Layer: action.LayerName,
-            ActParam: action.ActParam,
-            BeginNf: action.BeginNf,
-            EndNf: action.EndNf,
-            ContourGroupId: action.ContourGroupId,
-            ContourGroupNum: action.ContourGroupNum,
+            Object: objectName,
+            Index: index,
+            BatchId: timestamp.BatchId,
+            WorkerIndex: timestamp.Index,
+            Layer: jobInBatch.LayerName,
             StartDate: timestamp ? timestamp.StartTime : "",
             EndDate: timestamp ? timestamp.CompleteTime : "",
             Time: time_diff(timestamp.StartTime, timestamp.CompleteTime)
         };
     });
 
-    let uploadObj = {
-        Object: "Upload",
-        Name: "Upload",
-        Index: -1,
-        StartDate: data.uploadTime.StartTime,
-        EndDate: data.uploadTime.CompleteTime,
-        Time: time_diff(data.uploadTime.StartTime, data.uploadTime.CompleteTime)
-    };
-
-    let splitterObj = {
-        Object: "Splitter",
-        Name: "Splitter",
-        Index: 0,
-        StartDate: data.splitterTime.StartTime,
-        EndDate: data.splitterTime.CompleteTime,
-        Time: time_diff(data.splitterTime.StartTime, data.splitterTime.CompleteTime)
-    };
+    index += 1;
 
     let mergerObj;
     if (data.mergerTime.StartTime && data.mergerTime.CompleteTime) {
         mergerObj = {
             Object: "Merger",
             Name: "Merger",
-            Index: stats.length + 1,
+            Index: index,
             StartDate: data.mergerTime.StartTime,
             EndDate: data.mergerTime.CompleteTime,
             Time: time_diff(data.mergerTime.StartTime, data.mergerTime.CompleteTime)
         };
     }
 
+    index += 1;
+
     let downloadObj;
     if (data.downloadTime.StartTime && data.downloadTime.CompleteTime) {
         downloadObj = {
             Object: "Download",
             Name: "Download",
-            Index: stats.length + 2,
+            Index: index,
             StartDate: data.downloadTime.StartTime,
             EndDate: data.downloadTime.CompleteTime,
             Time: time_diff(data.downloadTime.StartTime, data.downloadTime.CompleteTime)
         };
     }
 
-    stats = [uploadObj, splitterObj, ...stats];
+    let stats = [uploadObj, splitterObj, ...acpArray];
     if (mergerObj) stats = [...stats, mergerObj];
     if (downloadObj) stats = [...stats, downloadObj];
 

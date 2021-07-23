@@ -26,7 +26,7 @@ function VegaLiteChart(props) {
             subtitle: `Client: ${client} Running time: ${localData?.runningTime}`
         },
         data: { values: chartData },
-        mark: { type: "bar"/*, tooltip: []*/ },
+        mark: { type: "bar", tooltip: [] },
         encoding: {
             x: {
                 type: "temporal",

@@ -5,7 +5,7 @@ export function parse(text) {
     return {
         runningDate: runningDate(arrayOfTimestamps),
         runningTime: runningTime(arrayOfTimestamps, errorTimeString),
-        jobName: jobName(text),
+        jobName: jobName(row_lines),
         batch: batch(arrayOfTimestamps),
         uploadTime: uploadTime(arrayOfTimestamps),
         splitterTime: splitterTime(arrayOfTimestamps),
@@ -16,9 +16,8 @@ export function parse(text) {
     };
 }
 
-function jobName(text) {
-    const row_lines = text.split('\n');
-    const job_line = row_lines.filter(line => line.match("Job:"))[0];
+function jobName(row_lines) {
+    let job_line = row_lines.filter(line => line.match("Job:"))[0];
     let job_name;
 
     if (job_line) {
@@ -118,15 +117,18 @@ function downloadTime(arrayOfTimestamps) {
 }
 
 function acpTime(row_lines, arrayOfTimestamps) {
-    let errorTimeStr = errorTime(row_lines, arrayOfTimestamps);
+    // let errorTimeStr = errorTime(row_lines, arrayOfTimestamps);
     let acp = arrayOfTimestamps.filter(d => (d.type === "Progress" || d.type === "Info") && d.object === "ACP");
     let acp_transformed = acp.map(action => {
-        let message = action.message.split(' ');
+        let message = action.message.split(" ").filter( s => s !== "");
         return {
             Time: action.utcDate,
             Step: message[0],
             Stage: message[1].split(':')[1],
-            Index: Number(message[2].split(':')[1]) + 1
+            Index: Number(message[2].split(':')[1]),
+            BatchId: Number(message[3].split("=")[1]),
+            JobId: action.job_id,
+            WorkerCmd: message[4].split("=")[1]
         };
     });
     let acp_started = acp_transformed
@@ -135,7 +137,10 @@ function acpTime(row_lines, arrayOfTimestamps) {
             return {
                 Stage: action.Stage,
                 Index: action.Index,
-                StartTime: action.Time
+                StartTime: action.Time,
+                BatchId: action.BatchId,
+                JobId: action.JobId,
+                WorkerCmd: action.WorkerCmd
             };
         });
     let acp_completed = acp_transformed
@@ -144,23 +149,47 @@ function acpTime(row_lines, arrayOfTimestamps) {
             return {
                 Stage: action.Stage,
                 Index: action.Index,
-                CompleteTime: action.Time
+                CompleteTime: action.Time,
+                BatchId: action.BatchId,
+                JobId: action.JobId,
+                WorkerCmd: action.WorkerCmd
             };
         });
-    let acp_timestamp = acp_started.map(action => {
-        let completeTimeMessage = acp_completed.find(
-            c => c.Stage === action.Stage && c.Index === action.Index
+    let acp_timestamps = acp_started.map(started => {
+        let acpCompleted = acp_completed.find(
+            completed => completed.Stage === started.Stage &&
+                completed.Index === started.Index &&
+                completed.BatchId === started.BatchId &&
+                completed.WorkerCmd === started.WorkerCmd
+        );
+
+        let masterCompleted = acp_completed.find(
+            (completed) =>
+                completed.BatchId === started.BatchId &&
+                completed.Index === 0 &&
+                completed.WorkerCmd === "NULL"
         );
 
         return {
-            Stage: action.Stage,
-            Index: action.Index,
-            StartTime: action.StartTime,
-            CompleteTime: completeTimeMessage ? completeTimeMessage.CompleteTime : errorTimeStr,
-            Succeed: !!completeTimeMessage
+            Stage: started.Stage,
+            Index: started.Index,
+            BatchId: started.BatchId,
+            JobId: started.JobId,
+            StartTime: started.StartTime,
+            CompleteTime: acpCompleted ?
+                acpCompleted.CompleteTime :
+                masterCompleted.CompleteTime,
+            Succeed: !!acpCompleted,
+            WorkerCmd: started.WorkerCmd
         };
     });
-    return acp_timestamp;
+
+    acp_timestamps.sort((c1, c2) => {
+        return c1.BatchId !== c2.BatchId
+            ? c1.BatchId - c2.BatchId
+            : c1.Index - c2.Index;
+    });
+    return acp_timestamps;
 }
 
 function errorTime(row_lines, arrayOfTimestamps) {
@@ -172,11 +201,6 @@ function errorTime(row_lines, arrayOfTimestamps) {
     if (errorMessage) {
         errorTime = errorMessage.utcDate
     }
-    // else {
-    //     let ping_lines = row_lines
-    //         .filter(line => line.match("I am alive"));
-    //     errorTime = ping_lines.length > 0 ? JSON.parse(ping_lines[ping_lines.length - 1]).Time : null;
-    // }
     return errorTime;
 }
 
